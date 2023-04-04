@@ -1,0 +1,91 @@
+<!-- Template source: https://mdbootstrap.com/docs/standard/extended/login/ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <div class="col-4 mx-auto mt-5">
+        <!-- Pills navs -->
+        <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <%= activeTab === 'login' ? 'active' : '' %>" id="tab-login" data-mdb-toggle="pill"
+                    href="#pills-login" role="tab" aria-controls="pills-login" aria-selected="false">Login</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link <%= activeTab === 'register' ? 'active' : '' %>" id="tab-register"
+                    data-mdb-toggle="pill" href="#pills-register" role="tab" aria-controls="pills-register"
+                    aria-selected="false">Register</a>
+            </li>
+        </ul>
+        <!-- Pills navs -->
+
+        <!-- Pills content -->
+        <div class="tab-content">
+            <div class="tab-pane fade <%= activeTab === 'login' ? 'show active' : '' %>" id="pills-login"
+                role="tabpanel" aria-labelledby="tab-login">
+                <form action="/" method="POST">
+                    <!-- Username input -->
+                    <div class="form-outline mb-4">
+                        <input type="username" id="loginUsername" name="loginUsername" class="form-control" />
+                        <label class="form-label" for="loginName">Username</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" id="loginPassword" name="loginPassword" class="form-control" />
+                        <label class="form-label" for="loginPassword">Password</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                </form>
+
+                <!-- Placeholder for confirmation when account is created successfully or error if account is not found -->
+                <div id="confirm-placeholder" style="color: green">
+                    <%- confirm  %>
+                </div>
+            </div>
+            <div class="tab-pane fade <%= activeTab === 'register' ? 'show active' : '' %>" id="pills-register"
+                role="tabpanel" aria-labelledby="tab-register">
+                <form action="/" method="POST">
+                    <!-- Username input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="registerName" name="registerUsername" class="form-control" />
+                        <label class="form-label" for="registerUsername">Username</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" id="registerPassword" name="registerPassword" class="form-control" />
+                        <label class="form-label" for="registerPassword">Password</label>
+                    </div>
+
+                    <!-- Repeat Password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" id="registerRepeatPassword" name="registerRepeatPassword"
+                            class="form-control" />
+                        <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+                </form>
+
+                <!-- Placeholder for error if username exists or password does not match -->
+                <div id="error-placeholder" style="color: red">
+                    <%- error %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Pills content -->
+
+    <!-- MDB -->
+    <script src="js/mdb.min.js"></script>
+    <!-- Login Script -->
+</body>
+
+</html>
