@@ -142,6 +142,7 @@ app.post('/', (req, res) => {
                                 console.log("Name already exists in database!");
                                 const errMessage = "Account with that name already exists.";
                                 res.render('pages/login', {
+                                    confirm: "",
                                     error: errMessage,
                                     activeTab: "register"
                                 });
@@ -154,6 +155,7 @@ app.post('/', (req, res) => {
             console.log("Passwords do not match!");
             const errMessage = "Passwords must match.";
             res.render('pages/login', {
+                confirm: "",
                 error: errMessage,
                 activeTab: "register"
             });
