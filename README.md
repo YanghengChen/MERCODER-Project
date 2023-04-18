@@ -1,1 +1,1 @@
-## IoTility (Project for SSE665)
+## Mercoder (CSC 325 Project Clergy Group)
