@@ -12,6 +12,13 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+const con = mysql.createConnection({
+    host: "34.150.146.151",
+    user: "app",
+    password: "password",
+    database: "csc325proj1"
+})
+
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "Thisismysupersecretsecret",
@@ -69,13 +76,6 @@ app.post('/login', (req, res) => {
     `);
 
     session = req.session;
-
-    const con = mysql.createConnection({
-        host: "34.150.146.151",
-        user: "app",
-        password: "password",
-        database: "csc325proj1"
-    })
 
     if (loginUsername) {
         con.connect(function (err) {
