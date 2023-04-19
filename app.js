@@ -22,6 +22,10 @@ app.use(sessions({
 
 var session;
 
+app.get('/', function (req, res) {
+    res.render('pages/home');
+})
+
 app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
