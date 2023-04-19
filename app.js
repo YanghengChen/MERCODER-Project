@@ -166,3 +166,13 @@ app.post('/login', (req, res) => {
         }
     };
 })
+
+app.get('/map/:problem', function (req, res) {
+    var probID = req.params.problem;
+    con.connect(function (err) {
+        if (err) {
+            console.log(`Error occurred in SQL connection: ${err.message}`);
+        };
+    })
+    console.log("Connected to database!");
+})
