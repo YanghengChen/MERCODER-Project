@@ -22,7 +22,7 @@ app.use(sessions({
 
 var session;
 
-app.get('/', function (req, res) {
+app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
         res.render('pages/home', {
@@ -50,7 +50,7 @@ var server = app.listen(port, function () {
     console.log(`Server started on port ${port}`);
 })
 
-app.post('/', (req, res) => {
+app.post('/login', (req, res) => {
     var loginUsername = req.body.loginUsername;
     var loginPassword = req.body.loginPassword;
     var registerUsername = req.body.registerUsername;
