@@ -67,10 +67,10 @@ app.post('/', (req, res) => {
     session = req.session;
 
     const con = mysql.createConnection({
-        host: "104.196.22.212",
-        user: "sse665-app",
-        password: "GoBears",
-        database: "sse665-iot"
+        host: "34.150.146.151",
+        user: "app",
+        password: "password",
+        database: "csc325proj1"
     })
 
     if (loginUsername) {
