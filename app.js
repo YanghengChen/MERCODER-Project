@@ -12,6 +12,21 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+const con = mysql.createConnection({
+    host: "34.150.146.151",
+    user: "app",
+    password: "password",
+    database: "csc325proj1",
+    port: 3306
+})
+
+con.connect(function (err) {
+    if (err) {
+        console.log(`Error occurred in SQL connection: ${err.message}`);
+    };
+})
+console.log("Connected to database!");
+
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "Thisismysupersecretsecret",
@@ -23,6 +38,10 @@ app.use(sessions({
 var session;
 
 app.get('/', function (req, res) {
+    res.render('pages/home');
+})
+
+app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
         res.render('pages/home', {
@@ -40,7 +59,7 @@ app.get('/', function (req, res) {
 app.get('/logout', function (req, res) {
     session=req.session;
     session.destroy();
-    res.redirect('/');
+    res.redirect('/login');
 })
 
 var server = app.listen(port, function () {
@@ -50,40 +69,29 @@ var server = app.listen(port, function () {
     console.log(`Server started on port ${port}`);
 })
 
-app.post('/', (req, res) => {
+app.post('/login', (req, res) => {
     var loginUsername = req.body.loginUsername;
     var loginPassword = req.body.loginPassword;
     var registerUsername = req.body.registerUsername;
     var registerPassword = req.body.registerPassword;
     var registerRepeatPassword = req.body.registerRepeatPassword;
+    var roleSelection = req.body.roleSelection;
     console.log(`
         ${loginUsername}
         ${loginPassword}
         ${registerUsername}
         ${registerPassword}
         ${registerRepeatPassword}
+        ${roleSelection}
     `);
 
     session = req.session;
 
-    const con = mysql.createConnection({
-        host: "104.196.22.212",
-        user: "sse665-app",
-        password: "GoBears",
-        database: "sse665-iot"
-    })
-
     if (loginUsername) {
-        con.connect(function (err) {
-            if (err) {
-                console.log(`Error occurred in SQL connection: ${err.message}`);
-            };
-        })
-        console.log("Connected to database!");
         con.query(
-            `SELECT \`Password\` FROM \`Users\` WHERE \`Username\` = '${loginUsername}'`,
+            `SELECT \`pass\` FROM \`Users\` WHERE \`userName\` = '${loginUsername}'`,
             function (err, result) {
-                console.log(result[0].Password);
+                console.log(result[0].pass);
                 if (err) {
                     console.log(`Error occurred in SQL request: ${err.message}`);
                 } else {
@@ -94,10 +102,10 @@ app.post('/', (req, res) => {
                             error: "",
                             activeTab: "login"
                         })
-                    } else if (result[0].Password === loginPassword) {
+                    } else if (result[0].pass === loginPassword) {
                         console.log("Redirecting to home page!");
                         session.username = loginUsername;
-                        res.redirect("/");
+                        res.redirect("/login");
                     } else {
                         console.log("Password incorrect!");
                         res.render('pages/login', {
@@ -111,46 +119,40 @@ app.post('/', (req, res) => {
         );
     } else if (registerUsername) {
         if (registerPassword === registerRepeatPassword) {
-            con.connect(function (err) {
-                if (err) {
-                    console.log(`Error occurred in SQL connection: ${err.message}`);
-                };
-                console.log("Connected to database!");
-                con.query(
-                    `SELECT * FROM \`Users\` WHERE \`Username\` = '${registerUsername}'`,
-                    function (err, result) {
-                        if (err) {
-                            console.log(`Error occurred in SQL request: ${err.message}`);
+            con.query(
+                `SELECT * FROM \`Users\` WHERE \`userName\` = '${registerUsername}'`,
+                function (err, result) {
+                    if (err) {
+                        console.log(`Error occurred in SQL request: ${err.message}`);
+                    } else {
+                        if (result.length === 0) {
+                            con.query(
+                                `INSERT INTO \`Users\`(\`userName\`, \`pass\`, \`roleID\`) VALUES ('${registerUsername}', '${registerPassword}', ${roleSelection})`,
+                                function (err, result) {
+                                    if (err) {
+                                        console.log(`Error occurred in SQL request: ${err.message}`);
+                                    } else {
+                                        console.log(`Added new user ${registerUsername} to database!`);
+                                    };
+                                }
+                            );
+                            res.render('pages/login', {
+                                confirm: "Account successfully created",
+                                error: "",
+                                activeTab: "login"
+                            });
                         } else {
-                            if (result.length === 0) {
-                                con.query(
-                                    `INSERT INTO \`Users\`(\`Username\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
-                                    function (err, result) {
-                                        if (err) {
-                                            console.log(`Error occurred in SQL request: ${err.message}`);
-                                        } else {
-                                            console.log(`Added new user ${registerUsername} to database!`);
-                                        };
-                                    }
-                                );
-                                res.render('pages/login', {
-                                    confirm: "Account successfully created",
-                                    error: "",
-                                    activeTab: "login"
-                                });
-                            } else {
-                                console.log("Name already exists in database!");
-                                const errMessage = "Account with that name already exists.";
-                                res.render('pages/login', {
-                                    confirm: "",
-                                    error: errMessage,
-                                    activeTab: "register"
-                                });
-                            };
+                            console.log("Name already exists in database!");
+                            const errMessage = "Account with that name already exists.";
+                            res.render('pages/login', {
+                                confirm: "",
+                                error: errMessage,
+                                activeTab: "register"
+                            });
                         };
-                    }
-                );
-            });
+                    };
+                }
+            );
         } else {
             console.log("Passwords do not match!");
             const errMessage = "Passwords must match.";
@@ -161,4 +163,42 @@ app.post('/', (req, res) => {
             });
         }
     };
+})
+
+app.get('/map/:problem', function (req, res) {
+    var probID = req.params.problem;
+    console.log(probID);
+    var mapData=[];
+    var query = "SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = " + String(probID) + ")";
+    console.log(query);
+    con.query(
+        query, 
+        function (err, result) {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+            console.log(result.length);
+            for(var i = 0; i < result.length; i++){
+                console.log("got to create entry");
+                var entry = {
+                    name: result[i].userName,
+                    lat: result[i].latit,
+                    lng: result[i].longit
+                }; 
+                console.log(entry);
+                mapData.push(entry);
+                console.log(mapData);
+            }
+            res.send(mapData);   
+        }   
+    )
+})
+
+app.get('/account', function (req, res) {
+    res.render('pages/account', {
+        FullName: "Jaron Anderson",
+        username: "jarbean",
+        Role: "Student"
+    });
 })

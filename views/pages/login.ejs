@@ -50,7 +50,7 @@
             </div>
             <div class="tab-pane fade <%= activeTab === 'register' ? 'show active' : '' %>" id="pills-register"
                 role="tabpanel" aria-labelledby="tab-register">
-                <form action="/" method="POST">
+                <form action="/login" method="POST">
                     <!-- Username input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="registerName" name="registerUsername" class="form-control" />
@@ -68,6 +68,16 @@
                         <input type="password" id="registerRepeatPassword" name="registerRepeatPassword"
                             class="form-control" />
                         <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+                    </div>
+
+                    <!-- Student or Teacher selection -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="roleSelection" id="inlineRadio1" value="0">
+                        <label class="form-check-label" for="inlineRadio1">Student</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="roleSelection" id="inlineRadio2" value="1">
+                        <label class="form-check-label" for="inlineRadio2">Teacher</label>
                     </div>
 
                     <!-- Submit button -->
