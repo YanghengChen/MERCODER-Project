@@ -191,7 +191,7 @@ app.get('/map/:problem', function (req, res) {
             for(var i = 0; i < result.length; i++){
                 console.log("got to create entry");
                 var entry = {
-                    name: result[i].userName,
+                    username: result[i].userName,
                     lat: result[i].latit,
                     lng: result[i].longit
                 }; 

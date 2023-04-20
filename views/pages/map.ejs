@@ -55,7 +55,7 @@
     for (let i = 0; i < locArray.length; i++) {
       let probMark = new google.maps.Marker({position:new google.maps.LatLng(locArray[i].lat, locArray[i].lng)});
       probmark.setMap(map);
-      let infowindow = new google.maps.InfoWindow({content:locArray[i].probID});
+      let infowindow = new google.maps.InfoWindow({content:locArray[i].username});
       google.maps.event.addListener(probMark, 'click', function () { infowindow.open(map, probmark);});
 
       google.maps.event.addListener(probMark, 'click', function () {
