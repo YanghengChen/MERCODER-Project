@@ -199,7 +199,9 @@ app.get('/map/:problem', function (req, res) {
                 mapData.push(entry);
                 console.log(mapData);
             }
-            res.send(mapData);   
+            res.render('pages/map', {
+                mapData: mapData
+            })  
         }   
     )
 })
