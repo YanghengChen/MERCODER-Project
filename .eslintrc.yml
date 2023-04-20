@@ -8,3 +8,10 @@ overrides: []
 parserOptions:
   ecmaVersion: latest
 rules: {}
+plugins:
+- html
+settings:
+  html/html-extensions:
+  - ".html"
+  - ".we"
+  - ".ejs"

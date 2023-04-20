@@ -4,5 +4,7 @@
     },
     "emmet.includeLanguages": {
         "ejs": "html"
-    }
+    },
+    "html.validate.scripts": false,
+    "eslint.validate": [ "javascript", "html" ]
 }
