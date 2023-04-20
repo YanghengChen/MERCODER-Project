@@ -16,7 +16,8 @@ const con = mysql.createConnection({
     host: "34.150.146.151",
     user: "app",
     password: "password",
-    database: "csc325proj1"
+    database: "csc325proj1",
+    port: 3306
 })
 
 const oneDay = 1000 * 60 * 60 * 24;
@@ -184,19 +185,19 @@ app.get('/map/:problem', function (req, res) {
         function (err, result) {
             if (err) {
                 console.log(`Error in SQL request: ${err.message}`);
+                return;
             }
-            else {
-                console.log("got to foreach");
-                result.forEach(row => { 
-                  var entry = {
-                    name: row.userName,
-                    lat: row.latit,
-                    lng: row.longit
-                  }; 
-                  mapData.push(entry);
-                });
+            for(var i = 0; i < result.length; i++){
+                console.log("got to foreach"); 
+                var entry = {
+                    name: result[i].userName,
+                    lat: result[i].latit,
+                    lng: result[i].longit
+                }; 
+                mapData.push(entry);
             }
         }
+        
         
     )
     res.send(mapData);
