@@ -195,6 +195,10 @@ app.get('/map/:problem', function (req, res) {
     )
 })
 
-app.get('/account', function (res, req) {
-    res.render('pages/account');
+app.get('/account', function (req, res) {
+    res.render('pages/account', {
+        FullName: "Jaron Anderson",
+        username: "jarbean",
+        Role: "Student"
+    });
 })
