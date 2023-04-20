@@ -59,7 +59,7 @@ app.get('/login', function (req, res) {
 app.get('/logout', function (req, res) {
     session=req.session;
     session.destroy();
-    res.redirect('/');
+    res.redirect('/login');
 })
 
 var server = app.listen(port, function () {
@@ -103,7 +103,7 @@ app.post('/login', (req, res) => {
                     } else if (result[0].Password === loginPassword) {
                         console.log("Redirecting to home page!");
                         session.username = loginUsername;
-                        res.redirect("/");
+                        res.redirect("/login");
                     } else {
                         console.log("Password incorrect!");
                         res.render('pages/login', {
