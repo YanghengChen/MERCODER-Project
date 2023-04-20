@@ -87,7 +87,7 @@ app.post('/login', (req, res) => {
 
     if (loginUsername) {
         con.query(
-            `SELECT \`Password\` FROM \`Users\` WHERE \`UserName\` = '${loginUsername}'`,
+            `SELECT \`Password\` FROM \`Users\` WHERE \`userName\` = '${loginUsername}'`,
             function (err, result) {
                 console.log(result[0].Password);
                 if (err) {
@@ -118,14 +118,14 @@ app.post('/login', (req, res) => {
     } else if (registerUsername) {
         if (registerPassword === registerRepeatPassword) {
             con.query(
-                `SELECT * FROM \`Users\` WHERE \`UserName\` = '${registerUsername}'`,
+                `SELECT * FROM \`Users\` WHERE \`userName\` = '${registerUsername}'`,
                 function (err, result) {
                     if (err) {
                         console.log(`Error occurred in SQL request: ${err.message}`);
                     } else {
                         if (result.length === 0) {
                             con.query(
-                                `INSERT INTO \`Users\`(\`UserName\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
+                                `INSERT INTO \`Users\`(\`userName\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
                                 function (err, result) {
                                     if (err) {
                                         console.log(`Error occurred in SQL request: ${err.message}`);
