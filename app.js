@@ -85,7 +85,7 @@ app.post('/login', (req, res) => {
         })
         console.log("Connected to database!");
         con.query(
-            `SELECT \`Password\` FROM \`Users\` WHERE \`Username\` = '${loginUsername}'`,
+            `SELECT \`Password\` FROM \`Users\` WHERE \`UserName\` = '${loginUsername}'`,
             function (err, result) {
                 console.log(result[0].Password);
                 if (err) {
@@ -121,14 +121,14 @@ app.post('/login', (req, res) => {
                 };
                 console.log("Connected to database!");
                 con.query(
-                    `SELECT * FROM \`Users\` WHERE \`Username\` = '${registerUsername}'`,
+                    `SELECT * FROM \`Users\` WHERE \`UserName\` = '${registerUsername}'`,
                     function (err, result) {
                         if (err) {
                             console.log(`Error occurred in SQL request: ${err.message}`);
                         } else {
                             if (result.length === 0) {
                                 con.query(
-                                    `INSERT INTO \`Users\`(\`Username\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
+                                    `INSERT INTO \`Users\`(\`UserName\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
                                     function (err, result) {
                                         if (err) {
                                             console.log(`Error occurred in SQL request: ${err.message}`);
