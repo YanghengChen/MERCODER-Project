@@ -75,21 +75,23 @@ app.post('/login', (req, res) => {
     var registerUsername = req.body.registerUsername;
     var registerPassword = req.body.registerPassword;
     var registerRepeatPassword = req.body.registerRepeatPassword;
+    var roleSelection = req.body.roleSelection;
     console.log(`
         ${loginUsername}
         ${loginPassword}
         ${registerUsername}
         ${registerPassword}
         ${registerRepeatPassword}
+        ${roleSelection}
     `);
 
     session = req.session;
 
     if (loginUsername) {
         con.query(
-            `SELECT \`Password\` FROM \`Users\` WHERE \`userName\` = '${loginUsername}'`,
+            `SELECT \`pass\` FROM \`Users\` WHERE \`userName\` = '${loginUsername}'`,
             function (err, result) {
-                console.log(result[0].Password);
+                console.log(result[0].pass);
                 if (err) {
                     console.log(`Error occurred in SQL request: ${err.message}`);
                 } else {
@@ -100,7 +102,7 @@ app.post('/login', (req, res) => {
                             error: "",
                             activeTab: "login"
                         })
-                    } else if (result[0].Password === loginPassword) {
+                    } else if (result[0].pass === loginPassword) {
                         console.log("Redirecting to home page!");
                         session.username = loginUsername;
                         res.redirect("/login");
@@ -125,7 +127,7 @@ app.post('/login', (req, res) => {
                     } else {
                         if (result.length === 0) {
                             con.query(
-                                `INSERT INTO \`Users\`(\`userName\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
+                                `INSERT INTO \`Users\`(\`userName\`, \`pass\`, \`roleID\`) VALUES ('${registerUsername}', '${registerPassword}', ${roleSelection})`,
                                 function (err, result) {
                                     if (err) {
                                         console.log(`Error occurred in SQL request: ${err.message}`);
