@@ -190,12 +190,11 @@ app.get('/map/:problem', function (req, res) {
                 mapData.push(entry);
                 console.log(mapData);
             }
-            res.send(mapData);
-            
-        }
-        
-        
+            res.send(mapData);   
+        }   
     )
-    
-    
+})
+
+app.get('/account', function (res, req) {
+    res.render('pages/account');
 })
