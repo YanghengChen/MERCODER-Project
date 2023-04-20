@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const ejs = require('ejs');
+require('ejs');
 const app = express();
 const port = 8080;
 
@@ -17,6 +17,7 @@ var server = app.listen(port, function () {
     var host = server.address().address;
     var port = server.address().port;
 
+    console.log(`Server started on host ${host}`);
     console.log(`Server started on port ${port}`);
 })
 
@@ -34,7 +35,7 @@ con.connect(function (err) {
     if (err) {
         console.log(`Error occurred in SQL connection: ${err.message}`);
         return;
-    };
+    }
 })
 console.log("Connected to database!");
 
@@ -66,7 +67,7 @@ app.get('/login', function (req, res) {
             error: "",
             activeTab: "login"
         });
-    };
+    }
 })
 
 // GET for logout
@@ -120,8 +121,8 @@ app.post('/login', (req, res) => {
                             error: "",
                             activeTab: "login"
                         })
-                    };
-                };
+                    }
+                }
             }
         );
     } else if (registerUsername) {
@@ -135,12 +136,12 @@ app.post('/login', (req, res) => {
                         if (result.length === 0) {
                             con.query(
                                 `INSERT INTO \`Users\`(\`userName\`, \`pass\`, \`roleID\`) VALUES ('${registerUsername}', '${registerPassword}', ${roleSelection})`,
-                                function (err, result) {
+                                function (err) {
                                     if (err) {
                                         console.log(`Error occurred in SQL request: ${err.message}`);
                                     } else {
                                         console.log(`Added new user ${registerUsername} to database!`);
-                                    };
+                                    }
                                 }
                             );
                             res.render('pages/login', {
@@ -156,8 +157,8 @@ app.post('/login', (req, res) => {
                                 error: errMessage,
                                 activeTab: "register"
                             });
-                        };
-                    };
+                        }
+                    }
                 }
             );
         } else {
@@ -169,7 +170,7 @@ app.post('/login', (req, res) => {
                 activeTab: "register"
             });
         }
-    };
+    }
 })
 
 // GET for map page
