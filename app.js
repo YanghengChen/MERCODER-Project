@@ -20,6 +20,13 @@ const con = mysql.createConnection({
     port: 3306
 })
 
+con.connect(function (err) {
+    if (err) {
+        console.log(`Error occurred in SQL connection: ${err.message}`);
+    };
+})
+console.log("Connected to database!");
+
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "Thisismysupersecretsecret",
@@ -79,12 +86,6 @@ app.post('/login', (req, res) => {
     session = req.session;
 
     if (loginUsername) {
-        con.connect(function (err) {
-            if (err) {
-                console.log(`Error occurred in SQL connection: ${err.message}`);
-            };
-        })
-        console.log("Connected to database!");
         con.query(
             `SELECT \`Password\` FROM \`Users\` WHERE \`UserName\` = '${loginUsername}'`,
             function (err, result) {
@@ -116,46 +117,40 @@ app.post('/login', (req, res) => {
         );
     } else if (registerUsername) {
         if (registerPassword === registerRepeatPassword) {
-            con.connect(function (err) {
-                if (err) {
-                    console.log(`Error occurred in SQL connection: ${err.message}`);
-                };
-                console.log("Connected to database!");
-                con.query(
-                    `SELECT * FROM \`Users\` WHERE \`UserName\` = '${registerUsername}'`,
-                    function (err, result) {
-                        if (err) {
-                            console.log(`Error occurred in SQL request: ${err.message}`);
+            con.query(
+                `SELECT * FROM \`Users\` WHERE \`UserName\` = '${registerUsername}'`,
+                function (err, result) {
+                    if (err) {
+                        console.log(`Error occurred in SQL request: ${err.message}`);
+                    } else {
+                        if (result.length === 0) {
+                            con.query(
+                                `INSERT INTO \`Users\`(\`UserName\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
+                                function (err, result) {
+                                    if (err) {
+                                        console.log(`Error occurred in SQL request: ${err.message}`);
+                                    } else {
+                                        console.log(`Added new user ${registerUsername} to database!`);
+                                    };
+                                }
+                            );
+                            res.render('pages/login', {
+                                confirm: "Account successfully created",
+                                error: "",
+                                activeTab: "login"
+                            });
                         } else {
-                            if (result.length === 0) {
-                                con.query(
-                                    `INSERT INTO \`Users\`(\`UserName\`, \`Password\`) VALUES ('${registerUsername}', '${registerPassword}')`,
-                                    function (err, result) {
-                                        if (err) {
-                                            console.log(`Error occurred in SQL request: ${err.message}`);
-                                        } else {
-                                            console.log(`Added new user ${registerUsername} to database!`);
-                                        };
-                                    }
-                                );
-                                res.render('pages/login', {
-                                    confirm: "Account successfully created",
-                                    error: "",
-                                    activeTab: "login"
-                                });
-                            } else {
-                                console.log("Name already exists in database!");
-                                const errMessage = "Account with that name already exists.";
-                                res.render('pages/login', {
-                                    confirm: "",
-                                    error: errMessage,
-                                    activeTab: "register"
-                                });
-                            };
+                            console.log("Name already exists in database!");
+                            const errMessage = "Account with that name already exists.";
+                            res.render('pages/login', {
+                                confirm: "",
+                                error: errMessage,
+                                activeTab: "register"
+                            });
                         };
-                    }
-                );
-            });
+                    };
+                }
+            );
         } else {
             console.log("Passwords do not match!");
             const errMessage = "Passwords must match.";
@@ -170,12 +165,6 @@ app.post('/login', (req, res) => {
 
 app.get('/map/:problem', function (req, res) {
     var probID = req.params.problem;
-    con.connect(function (err) {
-        if (err) {
-            console.log(`Error occurred in SQL connection: ${err.message}`);
-        };
-    })
-    console.log("Connected to database!");
     console.log(probID);
     var mapData=[];
     var query = "SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = " + String(probID) + ")";
