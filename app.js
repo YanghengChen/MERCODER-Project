@@ -12,6 +12,15 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Start node server
+var server = app.listen(port, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log(`Server started on port ${port}`);
+})
+
+// Database configuration
 const con = mysql.createConnection({
     host: "34.150.146.151",
     user: "app",
@@ -20,13 +29,17 @@ const con = mysql.createConnection({
     port: 3306
 })
 
+// Attempt to connect to database
 con.connect(function (err) {
     if (err) {
         console.log(`Error occurred in SQL connection: ${err.message}`);
+        return;
     };
 })
 console.log("Connected to database!");
 
+// Session configuration
+var session;
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "Thisismysupersecretsecret",
@@ -35,12 +48,12 @@ app.use(sessions({
     resave: true
 }));
 
-var session;
-
+// GET for landing page
 app.get('/', function (req, res) {
     res.render('pages/home');
 })
 
+// GET for login/registration page
 app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
@@ -56,20 +69,16 @@ app.get('/login', function (req, res) {
     };
 })
 
+// GET for logout
 app.get('/logout', function (req, res) {
     session=req.session;
     session.destroy();
     res.redirect('/login');
 })
 
-var server = app.listen(port, function () {
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log(`Server started on port ${port}`);
-})
-
+// POST for login/registration
 app.post('/login', (req, res) => {
+    session = req.session;
     var loginUsername = req.body.loginUsername;
     var loginPassword = req.body.loginPassword;
     var registerUsername = req.body.registerUsername;
@@ -84,8 +93,6 @@ app.post('/login', (req, res) => {
         ${registerRepeatPassword}
         ${roleSelection}
     `);
-
-    session = req.session;
 
     if (loginUsername) {
         con.query(
@@ -165,6 +172,7 @@ app.post('/login', (req, res) => {
     };
 })
 
+// GET for map page
 app.get('/map/:problem', function (req, res) {
     var probID = req.params.problem;
     console.log(probID);
@@ -195,6 +203,7 @@ app.get('/map/:problem', function (req, res) {
     )
 })
 
+// GET for account page
 app.get('/account', function (req, res) {
     res.render('pages/account', {
         FullName: "Jaron Anderson",
