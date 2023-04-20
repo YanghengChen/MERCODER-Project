@@ -175,4 +175,30 @@ app.get('/map/:problem', function (req, res) {
         };
     })
     console.log("Connected to database!");
+    console.log(probID);
+    var mapData=[];
+    var query = "SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = " + String(probID) + ")";
+    console.log(query);
+    con.query(
+        query, 
+        function (err, result) {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+            }
+            else {
+                console.log("got to foreach");
+                result.forEach(row => { 
+                  var entry = {
+                    name: row.userName,
+                    lat: row.latit,
+                    lng: row.longit
+                  }; 
+                  mapData.push(entry);
+                });
+            }
+        }
+        
+    )
+    res.send(mapData);
+    
 })
