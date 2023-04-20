@@ -187,19 +187,24 @@ app.get('/map/:problem', function (req, res) {
                 console.log(`Error in SQL request: ${err.message}`);
                 return;
             }
+            console.log(result.length);
             for(var i = 0; i < result.length; i++){
-                console.log("got to foreach"); 
+                console.log("got to create entry");
                 var entry = {
                     name: result[i].userName,
                     lat: result[i].latit,
                     lng: result[i].longit
                 }; 
+                console.log(entry);
                 mapData.push(entry);
+                console.log(mapData);
             }
+            res.send(mapData);
+            
         }
         
         
     )
-    res.send(mapData);
+    
     
 })
