@@ -223,7 +223,7 @@ app.get('/problem/create', function (req, res) {
 })
 
 // POST for question creation form
-app.get('/problem/create', function (req, res) {
+app.post('/problem/create', function (req, res) {
     session = req.session;
     var title = req.body.title;
     var description = req.body.description;
@@ -232,6 +232,10 @@ app.get('/problem/create', function (req, res) {
     var outputDesc = req.body.outputDesc;
     var outputSample = req.body.outputSample;
     var solutionLink = req.body.solutionLink;
+    var day = date.getDay();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    var currDate = day+"-"+month+"-"+year;
 })
 
 // GET for question editing
