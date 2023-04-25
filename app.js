@@ -126,7 +126,7 @@ app.post('/login', (req, res) => {
             }
         );
     } else if (registerUsername) {
-        if (registerPassword === registerRepeatPassword) {
+        if (registerPassword === registerRepeatPassword && !(roleSelection == null)) {
             con.query(
                 `SELECT * FROM \`Users\` WHERE \`userName\` = '${registerUsername}'`,
                 function (err, result) {
@@ -161,9 +161,17 @@ app.post('/login', (req, res) => {
                     }
                 }
             );
-        } else {
+        } else if (registerPassword != registerRepeatPassword) {
             console.log("Passwords do not match!");
             const errMessage = "Passwords must match.";
+            res.render('pages/login', {
+                confirm: "",
+                error: errMessage,
+                activeTab: "register"
+            });
+        } else {
+            console.log("User did not select role!");
+            const errMessage = "Must select role.";
             res.render('pages/login', {
                 confirm: "",
                 error: errMessage,
