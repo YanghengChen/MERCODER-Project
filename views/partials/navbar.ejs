@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Navbar Test</title>
-</head>
-<body>
-	<nav class="navbar" style="background-color: #CB5307;">
-	  <ul class="nav-links" style="display: flex; justify-content: space-around; align-items: center; list-style: none; height: 50px; margin: 0;">
-	    <li><a href="/../pages/home.ejs" style="color: #000000;">Home</a></li> 
-		<li><a href="/../pages/map.ejs" style="color: #000000;">Map</a></li>
-	    <li><a href="/../pages/list.ejs" style="color: #000000;">Problems</a></li>
-	    <li><a href="/../pages/account.ejs" style="color: #000000;">Account</a></li>
-	    <li><a href="/../pages/message.ejs" style="color: #000000;">Message</a></li>
-	  </ul>
-	</nav>
-</body>
-</html>
+<link href="/css/navbar.css" rel="stylesheet" type="text/css"/>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+	<div class="container px-5">
+		<a class="navbar-brand" href="#page-top"></a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+		<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav me-auto">
+				<li class="nav-item"><a class="nav-link" href="/login">Sign Up / Log In</a></li>
+				<li class="nav-item"><a class="nav-link" href="/">Home</a></li> 
+				<li class="nav-item"><a class="nav-link" href="/list">Problems</a></li>
+				<li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>

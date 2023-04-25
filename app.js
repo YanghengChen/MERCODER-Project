@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const ejs = require('ejs');
+require('ejs');
 const app = express();
 const port = 8080;
 
@@ -12,6 +12,16 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Start node server
+var server = app.listen(port, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log(`Server started on host ${host}`);
+    console.log(`Server started on port ${port}`);
+})
+
+// Database configuration
 const con = mysql.createConnection({
     host: "34.150.146.151",
     user: "app",
@@ -20,13 +30,17 @@ const con = mysql.createConnection({
     port: 3306
 })
 
+// Attempt to connect to database
 con.connect(function (err) {
     if (err) {
         console.log(`Error occurred in SQL connection: ${err.message}`);
-    };
+        return;
+    }
 })
 console.log("Connected to database!");
 
+// Session configuration
+var session;
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "Thisismysupersecretsecret",
@@ -35,12 +49,12 @@ app.use(sessions({
     resave: true
 }));
 
-var session;
-
+// GET for landing page
 app.get('/', function (req, res) {
     res.render('pages/home');
 })
 
+// GET for login/registration page
 app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
@@ -53,23 +67,19 @@ app.get('/login', function (req, res) {
             error: "",
             activeTab: "login"
         });
-    };
+    }
 })
 
+// GET for logout
 app.get('/logout', function (req, res) {
     session=req.session;
     session.destroy();
     res.redirect('/login');
 })
 
-var server = app.listen(port, function () {
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log(`Server started on port ${port}`);
-})
-
+// POST for login/registration
 app.post('/login', (req, res) => {
+    session = req.session;
     var loginUsername = req.body.loginUsername;
     var loginPassword = req.body.loginPassword;
     var registerUsername = req.body.registerUsername;
@@ -84,8 +94,6 @@ app.post('/login', (req, res) => {
         ${registerRepeatPassword}
         ${roleSelection}
     `);
-
-    session = req.session;
 
     if (loginUsername) {
         con.query(
@@ -113,12 +121,12 @@ app.post('/login', (req, res) => {
                             error: "",
                             activeTab: "login"
                         })
-                    };
-                };
+                    }
+                }
             }
         );
     } else if (registerUsername) {
-        if (registerPassword === registerRepeatPassword) {
+        if (registerPassword === registerRepeatPassword && !(roleSelection == null)) {
             con.query(
                 `SELECT * FROM \`Users\` WHERE \`userName\` = '${registerUsername}'`,
                 function (err, result) {
@@ -128,12 +136,12 @@ app.post('/login', (req, res) => {
                         if (result.length === 0) {
                             con.query(
                                 `INSERT INTO \`Users\`(\`userName\`, \`pass\`, \`roleID\`) VALUES ('${registerUsername}', '${registerPassword}', ${roleSelection})`,
-                                function (err, result) {
+                                function (err) {
                                     if (err) {
                                         console.log(`Error occurred in SQL request: ${err.message}`);
                                     } else {
                                         console.log(`Added new user ${registerUsername} to database!`);
-                                    };
+                                    }
                                 }
                             );
                             res.render('pages/login', {
@@ -149,11 +157,11 @@ app.post('/login', (req, res) => {
                                 error: errMessage,
                                 activeTab: "register"
                             });
-                        };
-                    };
+                        }
+                    }
                 }
             );
-        } else {
+        } else if (registerPassword != registerRepeatPassword) {
             console.log("Passwords do not match!");
             const errMessage = "Passwords must match.";
             res.render('pages/login', {
@@ -161,10 +169,19 @@ app.post('/login', (req, res) => {
                 error: errMessage,
                 activeTab: "register"
             });
+        } else {
+            console.log("User did not select role!");
+            const errMessage = "Must select role.";
+            res.render('pages/login', {
+                confirm: "",
+                error: errMessage,
+                activeTab: "register"
+            });
         }
-    };
+    }
 })
 
+// GET for map page
 app.get('/map/:problem', function (req, res) {
     var probID = req.params.problem;
     console.log(probID);
@@ -182,7 +199,7 @@ app.get('/map/:problem', function (req, res) {
             for(var i = 0; i < result.length; i++){
                 console.log("got to create entry");
                 var entry = {
-                    name: result[i].userName,
+                    username: result[i].userName,
                     lat: result[i].latit,
                     lng: result[i].longit
                 }; 
@@ -190,12 +207,45 @@ app.get('/map/:problem', function (req, res) {
                 mapData.push(entry);
                 console.log(mapData);
             }
-            res.send(mapData);   
+            res.render('pages/map', {
+                mapData: mapData
+            })  
         }   
     )
 })
 
+// GET for question creation page
+app.get('/problem/create', function (req, res) {
+    session = req.session;
+    res.render('pages/problem/edit', {
+        newProblem: true
+    })
+})
+
+// POST for question creation form
+app.get('/problem/create', function (req, res) {
+    session = req.session;
+    var title = req.body.title;
+    var description = req.body.description;
+    var inputDesc = req.body.inputDesc;
+    var inputSample = req.body.inputSample;
+    var outputDesc = req.body.outputDesc;
+    var outputSample = req.body.outputSample;
+    var solutionLink = req.body.solutionLink;
+})
+
+// GET for question editing
+app.get('/problem/edit/:problemID', function (req, res) {
+    session = req.session;
+    var probID = req.params.problem;
+    res.render('pages/problem/edit', {
+        newProblem: false
+    })
+})
+
+// GET for account page
 app.get('/account', function (req, res) {
+    session = req.session;
     res.render('pages/account', {
         FullName: "Jaron Anderson",
         username: "jarbean",
