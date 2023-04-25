@@ -1,0 +1,51 @@
+<!-- Template source: https://mdbootstrap.com/docs/standard/extended/login/ -->
+<!DOCTYPE html>
+<html lang="en">
+<% var rootDir = process.cwd() %>
+
+<head>
+    <%- include(rootDir + '/views/partials/head'); %>
+</head>
+
+<body style="padding-top: 80px;">
+    <!-- Navbar -->
+    <%- include(rootDir + '/views/partials/navbar'); %>
+
+    <div class="text-center">
+        <h1><%= newProblem ? "Create New Problem" : "Editing" %></h1>
+    </div>
+
+    <!-- Creation Form -->
+    <div class="col-4 mx-auto mt-3">
+        <form class="needs-validation" novalidate>
+            <div class="form-group pb-2">
+                <input type="text" class="form-control" id="title" placeholder="Problem Title">
+            </div>
+            <div class="form-group pb-2">
+                <textarea class="form-control" id="description" rows="5" placeholder="Problem description"></textarea>
+            </div>
+            <div class="form-group pb-2">
+                <textarea class="form-control" id="inputDesc" rows="2" placeholder="Input description"></textarea>
+            </div>
+            <div class="form-group pb-2">
+                <textarea class="form-control" id="inputSample" rows="2" placeholder="Sample input"></textarea>
+            </div>
+            <div class="form-group pb-2">
+                <textarea class="form-control" id="outputDesc" rows="2" placeholder="Output description"></textarea>
+            </div>
+            <div class="form-group pb-2">
+                <textarea class="form-control" id="outputSample" rows="2" placeholder="Sample Output"></textarea>
+            </div>
+            <div class="form-group pb-4">
+                <input type="text" class="form-control" id="solutionLink" aria-describedby="solutionHelp" placeholder="Solution link (ex. https://replit.com/)">
+                <small id="solutionHelp" class="form-text text-muted">Must be a Replit link.</small>
+            </div>
+            <button type="submit" class="btn btn-primary"><%= newProblem ? "Create" : "Save" %> </button>
+        </form>
+    </div>
+
+    <!-- MDB -->
+    <script src="js/mdb.min.js"></script>
+</body>
+
+</html>

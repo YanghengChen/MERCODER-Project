@@ -1,12 +1,16 @@
 <!-- Template source: https://mdbootstrap.com/docs/standard/extended/login/ -->
 <!DOCTYPE html>
 <html lang="en">
+<% var rootDir = process.cwd() %>
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include(rootDir + '/views/partials/head'); %>
 </head>
 
-<body>
+<body style="padding-top: 50px;">
+    <!-- Navbar -->
+    <%- include(rootDir + '/views/partials/navbar'); %>
+
     <div class="col-4 mx-auto mt-5">
         <!-- Pills navs -->
         <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
@@ -75,7 +79,7 @@
                         <input class="form-check-input" type="radio" name="roleSelection" id="inlineRadio1" value="0">
                         <label class="form-check-label" for="inlineRadio1">Student</label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline pb-2">
                         <input class="form-check-input" type="radio" name="roleSelection" id="inlineRadio2" value="1">
                         <label class="form-check-label" for="inlineRadio2">Teacher</label>
                     </div>
