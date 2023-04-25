@@ -214,8 +214,38 @@ app.get('/map/:problem', function (req, res) {
     )
 })
 
+// GET for question creation page
+app.get('/problem/create', function (req, res) {
+    session = req.session;
+    res.render('pages/problem/edit', {
+        newProblem: true
+    })
+})
+
+// POST for question creation form
+app.get('/problem/create', function (req, res) {
+    session = req.session;
+    var title = req.body.title;
+    var description = req.body.description;
+    var inputDesc = req.body.inputDesc;
+    var inputSample = req.body.inputSample;
+    var outputDesc = req.body.outputDesc;
+    var outputSample = req.body.outputSample;
+    var solutionLink = req.body.solutionLink;
+})
+
+// GET for question editing
+app.get('/problem/edit/:problemID', function (req, res) {
+    session = req.session;
+    var probID = req.params.problem;
+    res.render('pages/problem/edit', {
+        newProblem: false
+    })
+})
+
 // GET for account page
 app.get('/account', function (req, res) {
+    session = req.session;
     res.render('pages/account', {
         FullName: "Jaron Anderson",
         username: "jarbean",

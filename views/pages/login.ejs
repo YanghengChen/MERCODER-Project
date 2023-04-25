@@ -1,15 +1,15 @@
 <!-- Template source: https://mdbootstrap.com/docs/standard/extended/login/ -->
 <!DOCTYPE html>
 <html lang="en">
+<% var rootDir = process.cwd() %>
 
 <head>
-    <%- include('../partials/head'); %>
-    <link href="css/home.css" rel="stylesheet" />
+    <%- include(rootDir + '/views/partials/head'); %>
 </head>
 
 <body style="padding-top: 50px;">
     <!-- Navbar -->
-    <%- include('../partials/navbar'); %>
+    <%- include(rootDir + '/views/partials/navbar'); %>
 
     <div class="col-4 mx-auto mt-5">
         <!-- Pills navs -->
