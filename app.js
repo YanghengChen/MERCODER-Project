@@ -224,7 +224,9 @@ app.get('/problem/create', function (req, res) {
 
 // POST for question creation form
 app.post('/problem/create', function (req, res) {
+    console.log("food");
     session = req.session;
+    var userID = 8;
     var title = req.body.title;
     var description = req.body.description;
     var inputDesc = req.body.inputDesc;
@@ -232,10 +234,31 @@ app.post('/problem/create', function (req, res) {
     var outputDesc = req.body.outputDesc;
     var outputSample = req.body.outputSample;
     var solutionLink = req.body.solutionLink;
-    var day = date.getDay();
-    var month = date.getMonth();
+    var date = new Date();
+    console.log(date);
+    var day = date.getDate();
+    var month = date.getMonth()+1;
     var year = date.getFullYear();
-    var currDate = day+"-"+month+"-"+year;
+    var currDate = year+"-"+month+"-"+day;
+    console.log(currDate);
+    console.log(title);
+    
+    //sql to get current id num and then make query
+    var query = `insert into Problems(userID,title,creationDate,description,answer,sampleInput,sampleOutput,inputDescription,outputDescription) values('${userID}','${title}','${currDate}','${description}','${solutionLink}','${inputSample}','${outputSample}','${inputDesc}','${outputDesc}')`;
+    console.log(query);
+    con.query(
+        query,
+        function (err, result) {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+            console.log("got to write variable");
+            var highestID = result;
+            console.log(highestID);
+        }
+    )
+    
 })
 
 // GET for question editing
@@ -255,25 +278,4 @@ app.get('/account', function (req, res) {
         username: "jarbean",
         Role: "Student"
     });
-})
-
-// GET for problem list page
-app.get('/list', function (req, res) {
-    session = req.session;
-    // var questions = [];
-    var query = 'SELECT title, description FROM Problems';
-    con.query(
-        query, 
-        function (err, result) {
-            if (err) {
-                console.log(`Error in SQL request: ${err.message}`);
-                return;
-            }
-            console.log(result);
-            res.render('pages/list', {
-                questions: result
-            })  
-        }   
-    )
-    
 })
