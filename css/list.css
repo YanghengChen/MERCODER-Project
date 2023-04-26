@@ -2,18 +2,18 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
   }
-  h1 {
+  .question-list h1 {
     color: #4a4a4a;
     text-align: center;
     margin-top: 50px;
   }
-  p {
+  .question-list p {
     font-size: 18px;
     color: #4a4a4a;
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
-  ul {
+  .question-list ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
   }
-  li {
+  .question-list li {
     width: 400px;
     margin: 20px;
     padding: 20px;
@@ -30,23 +30,23 @@ body {
     background-color: #fff;
     transition: all 0.3s ease;
   }
-  li:hover {
+  .question-list li:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
-  h3 {
+  .question-list h3 {
     font-size: 24px;
     color: #4a4a4a;
     margin-top: 0;
     margin-bottom: 10px;
   }
-  p.question-desc {
+  .question-list p.question-desc {
     text-align: left;
     font-size: 18px;
     color: #8c8c8c;
     margin-top: 0;
   }
-  button {
+  .question-list button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -57,6 +57,6 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  button:hover {
+  .question-list button:hover {
     background-color: #0056b3;
   }
