@@ -279,3 +279,23 @@ app.get('/account', function (req, res) {
         Role: "Student"
     });
 })
+
+// GET for problem list page
+app.get('/list', function (req, res) {
+    session = req.session;
+    // var questions = [];
+    var query = 'SELECT title, description FROM Problems';
+    con.query(
+        query, 
+        function (err, result) {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+            console.log(result);
+            res.render('pages/list', {
+                questions: result
+            })  
+        }   
+    )
+})
