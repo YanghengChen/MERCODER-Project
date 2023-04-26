@@ -14,7 +14,7 @@ body {
     margin-bottom: 50px;
   }
   ul {
-    list-style: none;
+    list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
@@ -41,6 +41,7 @@ body {
     margin-bottom: 10px;
   }
   p.question-desc {
+    text-align: left;
     font-size: 18px;
     color: #8c8c8c;
     margin-top: 0;

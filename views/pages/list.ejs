@@ -10,16 +10,14 @@
   <h1>Coding Questions</h1>
   <p>Here are some common coding questions:</p>
   <ul id="question-list">
+    <% for(var i = 0; i < questions.length; i++) { %>
+      <li>
+        <h3><%= questions[i].title %></h3>
+        <p class="question-desc"><%= questions[i].description %></p>
+        <button>View</button>
+      </li>
+    <% } %>
   </ul>
-
-  
-  <% for(var i = 0; i < questions.length; i++) { %>
-    <li>
-      <h3><%= questions[i].title %></h3>
-      <p class="question-desc"><%= questions[i].description %></p>
-      <button>View</button>
-    </li>
-  <% } %>
 </body>
 
 </html>
