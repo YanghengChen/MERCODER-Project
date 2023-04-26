@@ -3,7 +3,7 @@
 
 <head>
   <title>Coding Questions</title>
-  <link href="/css/list.css" rel="stylesheet" />
+  <link href="/css/list.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -12,49 +12,14 @@
   <ul id="question-list">
   </ul>
 
-  <script>
-        /* 
-      const questions = [
-      {
-          title: "FizzBuzz",
-          description: "Write a program that prints the numbers from 1 to 100. But for multiples of three print “Fizz” instead of the number and for the multiples of five print “Buzz”. For numbers which are multiples of both three and five print “FizzBuzz”."
-        },
-        {
-          title: "Palindrome Checker",
-          description: "Write a function that takes a string as input and returns true if the string is a palindrome, false otherwise. A palindrome is a word, phrase, number, or other sequence of characters which reads the same backward or forward."
-        },
-        {
-          title: "Reverse a String",
-          description: "Write a function that takes a string as input and returns the string reversed. For example, if the input is 'hello', the output should be 'olleh'."
-        },
-        {
-          title: "something a String",
-          description: "... a function that takes a string as input and returns the string reversed. For example, if the input is 'hello', the output should be 'olleh'."
-        },
-
-      ];
-      */
-      
-      var questions = <%= questions %> 
-    
-      questions.forEach(question => {
-        const li = document.createElement("li");
-        const h3 = document.createElement("h3");
-        const p = document.createElement("p");
-        const button = document.createElement("button");
-        h3.textContent = question.title;
-        p.textContent = question.description;
-        button.textContent = "View Solution";
-        button.addEventListener("click", () => {
-          alert("Sorry, the solution is not available at this time.");
-        });
-        p.classList.add("question-desc");
-        li.appendChild(h3);
-        li.appendChild(p);
-        li.appendChild(button);
-        questionList.appendChild(li);
-      });
-  </script>
+  
+  <% for(var i = 0; i < questions.length; i++) { %>
+    <li>
+      <h3><%= questions[i].title %></h3>
+      <p class="question-desc"><%= questions[i].description %></p>
+      <button>View</button>
+    </li>
+  <% } %>
 </body>
 
 </html>
