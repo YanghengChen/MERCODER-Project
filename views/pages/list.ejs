@@ -3,9 +3,23 @@
 <% var rootDir = process.cwd() %>
 
 <head>
-  <title>Coding Questions</title>
+  <title>Coding Problems</title>
   <link href="/css/list.css" rel="stylesheet" type="text/css"/>
   <%- include(rootDir + '/views/partials/head'); %>
+
+  <!-- JQuery Search filtering-->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <script>
+    $(document).ready( function() {
+      $("#search").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#question-list li").filter(function() {
+          $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
 </head>
 
 <body style="padding-top: 80px;">
@@ -13,8 +27,10 @@
   <%- include(rootDir + '/views/partials/navbar'); %>
 
   <div class="question-list">
-    <h1>Coding Questions</h1>
-    <p>Here are some common coding questions:</p>
+    <h1>Coding Problems</h1>
+    <div class="input-group w-25 mx-auto">
+      <input id="search" type="text" class="form-control" placeholder="Search...">
+    </div>
     <ul id="question-list">
       <% for(var i = 0; i < questions.length; i++) { %>
         <li>
