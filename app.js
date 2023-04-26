@@ -212,6 +212,27 @@ app.get('/map/:problem', function (req, res) {
             })  
         }   
     )
+    var query ="select title, description from Problems";
+    var problems = [];
+    con.query(
+        query,
+        function (err, result){
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+            for(var i = 0; i< result.length; i++){
+                console.log('got to create description array');
+                var problem = {
+                    title: result[i].title,
+                    description: result[i].description
+                };
+                console.log(problem);
+                problems.push(problem);
+                console.log(problems);
+            }
+        }
+    )
 })
 
 // GET for question creation page
@@ -243,7 +264,7 @@ app.post('/problem/create', function (req, res) {
     console.log(currDate);
     console.log(title);
     
-    //sql to get current id num and then make query
+    //sql to query for inserting values of variables gotten from form into database
     var query = `insert into Problems(userID,title,creationDate,description,answer,sampleInput,sampleOutput,inputDescription,outputDescription) values('${userID}','${title}','${currDate}','${description}','${solutionLink}','${inputSample}','${outputSample}','${inputDesc}','${outputDesc}')`;
     console.log(query);
     con.query(
