@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Coding Questions</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+      h1 {
+        color: #4a4a4a;
+        text-align: center;
+        margin-top: 50px;
+      }
+      p {
+        font-size: 18px;
+        color: #4a4a4a;
+        text-align: center;
+        margin-bottom: 50px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      li {
+        width: 400px;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        background-color: #fff;
+        transition: all 0.3s ease;
+      }
+      li:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+      h3 {
+        font-size: 24px;
+        color: #4a4a4a;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      p.question-desc {
+        font-size: 18px;
+        color: #8c8c8c;
+        margin-top: 0;
+      }
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Coding Questions</h1>
+    <p>Here are some common coding questions:</p>
+    <ul id="question-list">
+    </ul>
+
+
+    <script>
+         /* 
+        const questions = [
+         
+        
+        {
+            title: "FizzBuzz",
+            description: "Write a program that prints the numbers from 1 to 100. But for multiples of three print “Fizz” instead of the number and for the multiples of five print “Buzz”. For numbers which are multiples of both three and five print “FizzBuzz”."
+          },
+          {
+            title: "Palindrome Checker",
+            description: "Write a function that takes a string as input and returns true if the string is a palindrome, false otherwise. A palindrome is a word, phrase, number, or other sequence of characters which reads the same backward or forward."
+          },
+          {
+            title: "Reverse a String",
+            description: "Write a function that takes a string as input and returns the string reversed. For example, if the input is 'hello', the output should be 'olleh'."
+          },
+          {
+            title: "something a String",
+            description: "... a function that takes a string as input and returns the string reversed. For example, if the input is 'hello', the output should be 'olleh'."
+          },
+
+        ];
+        */
+        
+      
+      
+        var questions = <%= questions %> 
+      
+        questions.forEach(question => {
+          const li = document.createElement("li");
+          const h3 = document.createElement("h3");
+          const p = document.createElement("p");
+          const button = document.createElement("button");
+          h3.textContent = question.title;
+          p.textContent = question.description;
+          button.textContent = "View Solution";
+          button.addEventListener("click", () => {
+            alert("Sorry, the solution is not available at this time.");
+});
+p.classList.add("question-desc");
+li.appendChild(h3);
+li.appendChild(p);
+li.appendChild(button);
+questionList.appendChild(li);
+});
+</script>
+
+  </body>
+</html>
