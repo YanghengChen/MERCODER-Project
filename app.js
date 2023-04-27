@@ -262,11 +262,27 @@ app.post('/problem/create', function (req, res) {
 // GET for question editing
 app.get('/problem/edit/:problemID', function (req, res) {
     session = req.session;
-    var probID = req.params.problemID;
-    res.render('pages/problem/edit', {
-        newProblem: false,
-        probID: probID
-    })
+    let probID = req.params.problemID;
+    let query = `SELECT * FROM Problems WHERE questionID = ${probID}`;
+    con.query(
+        query,
+        function (err, result) {
+            if (err) {
+                console.log(`Error in SQL resquest: ${err.message}`);
+                return;
+            }
+            res.render('pages/problem/edit', {
+                newProblem: false,
+                probID: probID,
+                title: result[0].title,
+                description: result[0].description,
+                inputDesc: result[0].inputDescription,
+                inputSample: result[0].sampleInput,
+                outputDesc: result[0].outputDescription,
+                outputSample: result[0].sampleOutput,
+                solutionLink: result[0].answer
+            })
+        })
 })
 
 app.post('/problem/edit/:problemID', function (req, res) {
@@ -291,7 +307,6 @@ app.post('/problem/edit/:problemID', function (req, res) {
                 console.log(`Error in SQL resquest: ${err.message}`);
                 return;
             }
-            
         }
     )
 })
