@@ -51,7 +51,10 @@ app.use(sessions({
 
 // GET for landing page
 app.get('/', function (req, res) {
-    res.render('pages/home');
+    session = req.session;
+    res.render('pages/home', {
+        loggedIn: session.loggedIn ? true : false
+    });
 })
 
 // GET for login/registration page
@@ -59,10 +62,12 @@ app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
         res.render('pages/home', {
+            loggedIn: session.loggedIn ? true : false,
             user: session.username
         });
     } else {
         res.render('pages/login', {
+            loggedIn: session.loggedIn ? true : false,
             confirm: "",
             error: "",
             activeTab: "login"
@@ -106,6 +111,7 @@ app.post('/login', (req, res) => {
                     if(result === "") {
                         console.log("Account not found!");
                         res.render('pages/login', {
+                            loggedIn: session.loggedIn ? true : false,
                             confirm: "Account with this username does not exist.",
                             error: "",
                             activeTab: "login"
@@ -119,6 +125,7 @@ app.post('/login', (req, res) => {
                     } else {
                         console.log("Password incorrect!");
                         res.render('pages/login', {
+                            loggedIn: session.loggedIn ? true : false,
                             confirm: "Password is incorrect.",
                             error: "",
                             activeTab: "login"
@@ -147,6 +154,7 @@ app.post('/login', (req, res) => {
                                 }
                             );
                             res.render('pages/login', {
+                                loggedIn: session.loggedIn ? true : false,
                                 confirm: "Account successfully created",
                                 error: "",
                                 activeTab: "login"
@@ -155,6 +163,7 @@ app.post('/login', (req, res) => {
                             console.log("Name already exists in database!");
                             const errMessage = "Account with that name already exists.";
                             res.render('pages/login', {
+                                loggedIn: session.loggedIn ? true : false,
                                 confirm: "",
                                 error: errMessage,
                                 activeTab: "register"
@@ -167,6 +176,7 @@ app.post('/login', (req, res) => {
             console.log("Passwords do not match!");
             const errMessage = "Passwords must match.";
             res.render('pages/login', {
+                loggedIn: session.loggedIn ? true : false,
                 confirm: "",
                 error: errMessage,
                 activeTab: "register"
@@ -175,6 +185,7 @@ app.post('/login', (req, res) => {
             console.log("User did not select role!");
             const errMessage = "Must select role.";
             res.render('pages/login', {
+                loggedIn: session.loggedIn ? true : false,
                 confirm: "",
                 error: errMessage,
                 activeTab: "register"
@@ -210,6 +221,7 @@ app.get('/map/:problem', function (req, res) {
             mapData = JSON.stringify(mapData);
             console.log(mapData);
             res.render('pages/map', {
+                loggedIn: session.loggedIn ? true : false,
                 mapData: JSON.stringify(mapData)
             })  
         }   
@@ -220,6 +232,7 @@ app.get('/map/:problem', function (req, res) {
 app.get('/problem/create', function (req, res) {
     session = req.session;
     res.render('pages/problem/edit', {
+        loggedIn: session.loggedIn ? true : false,
         newProblem: true
     })
 })
@@ -274,6 +287,7 @@ app.get('/problem/edit/:problemID', function (req, res) {
                 return;
             }
             res.render('pages/problem/edit', {
+                loggedIn: session.loggedIn ? true : false,
                 newProblem: false,
                 probID: probID,
                 title: result[0].title,
@@ -317,6 +331,7 @@ app.post('/problem/edit/:problemID', function (req, res) {
 app.get('/account', function (req, res) {
     session = req.session;
     res.render('pages/account', {
+        loggedIn: session.loggedIn ? true : false,
         FullName: "Jaron Anderson",
         username: "jarbean",
         Role: "Student"
@@ -337,6 +352,7 @@ app.get('/list', function (req, res) {
             }
             console.log(result);
             res.render('pages/list', {
+                loggedIn: session.loggedIn ? true : false,
                 questions: result
             })  
         }   
