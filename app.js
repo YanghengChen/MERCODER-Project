@@ -119,7 +119,7 @@ app.post('/login', (req, res) => {
                     } else if (result[0].pass === loginPassword) {
                         console.log("Redirecting to home page!");
                         session.userID = result[0].userID;
-                        session.role = result[0].roleID;
+                        session.roleID = result[0].roleID;
                         session.loggedIn = true;
                         session.username = loginUsername;
                         res.redirect("/");
@@ -232,6 +232,11 @@ app.get('/map/:problem', function (req, res) {
 // GET for question creation page
 app.get('/problem/create', function (req, res) {
     session = req.session;
+    if (!session.roleID || session.roleID == 0) {
+        console.log("User does not have permission!");
+        res.redirect('/');
+        return;
+    }
     res.render('pages/problem/edit', {
         loggedIn: session.loggedIn ? true : false,
         newProblem: true
@@ -278,6 +283,11 @@ app.post('/problem/create', function (req, res) {
 // GET for question editing
 app.get('/problem/edit/:problemID', function (req, res) {
     session = req.session;
+    if (!session.roleID || session.roleID == 0) {
+        console.log("User does not have permission!");
+        res.redirect('/');
+        return;
+    }
     let probID = req.params.problemID;
     let query = `SELECT * FROM Problems WHERE questionID = ${probID}`;
     con.query(
