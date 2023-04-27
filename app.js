@@ -197,7 +197,6 @@ app.get('/map/:problem', function (req, res) {
             }
             console.log(result.length);
             for(var i = 0; i < result.length; i++){
-                console.log("got to create entry");
                 var entry = {
                     username: result[i].userName,
                     lat: result[i].latit,
@@ -205,33 +204,13 @@ app.get('/map/:problem', function (req, res) {
                 }; 
                 console.log(entry);
                 mapData.push(entry);
-                console.log(mapData);
             }
+            mapData = JSON.stringify(mapData);
+            console.log(mapData);
             res.render('pages/map', {
-                mapData: mapData
+                mapData: JSON.stringify(mapData)
             })  
         }   
-    )
-    var query ="select title, description from Problems";
-    var problems = [];
-    con.query(
-        query,
-        function (err, result){
-            if (err) {
-                console.log(`Error in SQL request: ${err.message}`);
-                return;
-            }
-            for(var i = 0; i< result.length; i++){
-                console.log('got to create description array');
-                var problem = {
-                    title: result[i].title,
-                    description: result[i].description
-                };
-                console.log(problem);
-                problems.push(problem);
-                console.log(problems);
-            }
-        }
     )
 })
 
