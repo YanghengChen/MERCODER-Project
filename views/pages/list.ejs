@@ -27,6 +27,11 @@
 
   <div class="question-list">
     <h1>Coding Problems</h1>
+    <% if (userRole === 1 || userRole === 2) { %>
+      <div class="text-center pb-4">
+        <a href="/problem/create"><button>Create New Problem</button></a>
+      </div>
+    <% } %>
     <div class="input-group w-25 mx-auto">
       <input id="search" type="text" class="form-control" placeholder="Search...">
     </div>
