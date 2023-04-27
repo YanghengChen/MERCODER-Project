@@ -14,7 +14,7 @@
       $("#search").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $("#question-list li").filter(function() {
-          $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
       });
     });
