@@ -102,7 +102,7 @@ app.post('/login', (req, res) => {
 
     if (loginUsername) {
         con.query(
-            `SELECT pass, userID FROM Users WHERE userName = '${loginUsername}'`,
+            `SELECT pass, userID, roleID FROM Users WHERE userName = '${loginUsername}'`,
             function (err, result) {
                 console.log(result[0].pass);
                 if (err) {
@@ -119,6 +119,7 @@ app.post('/login', (req, res) => {
                     } else if (result[0].pass === loginPassword) {
                         console.log("Redirecting to home page!");
                         session.userID = result[0].userID;
+                        session.role = result[0].roleID;
                         session.loggedIn = true;
                         session.username = loginUsername;
                         res.redirect("/");
