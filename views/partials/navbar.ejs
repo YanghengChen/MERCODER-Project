@@ -7,7 +7,9 @@
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item"><a class="nav-link" href=<%- loggedIn ? "/logout" : "/login" %>><%- loggedIn ? "Logout" : "Sign Up / Login" %></a></li>
 				<li class="nav-item"><a class="nav-link" href="/list">Problems</a></li>
-				<li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+				<% if (loggedIn) { %>
+					<li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+				<% } %>
 			</ul>
 		</div>
 	</div>
