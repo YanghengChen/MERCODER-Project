@@ -239,7 +239,7 @@ app.post('/problem/create', function (req, res) {
     var day = date.getDate();
     var month = date.getMonth()+1;
     var year = date.getFullYear();
-    var currDate = year+"-"+month+"-"+day;
+    var currDate = year + "-" + month + "-" + day;
     console.log(currDate);
     console.log(title);
     
