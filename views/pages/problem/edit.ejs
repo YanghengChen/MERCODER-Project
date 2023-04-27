@@ -17,7 +17,7 @@
 
     <!-- Creation Form -->
     <div class="col-4 mx-auto mt-3">
-        <form class="needs-validation" novalidate action="/problem/create" method="POST">
+        <form class="needs-validation" novalidate action=<%- newProblem ? "/problem/create" : `/problem/edit/${probID}` %> method="POST">
             <div class="form-group pb-2">
                 <input type="text" class="form-control" id="title" name="title" placeholder="Problem Title">
             </div>
