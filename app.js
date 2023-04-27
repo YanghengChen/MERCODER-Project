@@ -361,7 +361,6 @@ app.get('/list', function (req, res) {
                 console.log(`Error in SQL request: ${err.message}`);
                 return;
             }
-            console.log(result);
             res.render('pages/list', {
                 userRole: session.roleID ? session.roleID : 3,
                 loggedIn: session.loggedIn ? true : false,
