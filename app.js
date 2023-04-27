@@ -247,7 +247,7 @@ app.get('/problem/create', function (req, res) {
 app.post('/problem/create', function (req, res) {
     console.log("food");
     session = req.session;
-    var userID = 8;
+    var userID = 8; //needs to be replaced by userID session variable later
     var title = req.body.title;
     var description = req.body.description;
     var inputDesc = req.body.inputDesc;
@@ -274,9 +274,7 @@ app.post('/problem/create', function (req, res) {
                 console.log(`Error in SQL request: ${err.message}`);
                 return;
             }
-            console.log("got to write variable");
-            var highestID = result;
-            console.log(highestID);
+            
         }
     )
     
@@ -285,10 +283,38 @@ app.post('/problem/create', function (req, res) {
 // GET for question editing
 app.get('/problem/edit/:problemID', function (req, res) {
     session = req.session;
-    var probID = req.params.problem;
+    var probID = req.params.problemID;
     res.render('pages/problem/edit', {
-        newProblem: false
+        newProblem: false,
+        probID: probID
     })
+})
+
+app.post('/problem/edit/:problemID', function (req, res) {
+    console.log("food2");
+    session = req.session;
+    let probID = req.params.problemID;
+    console.log(probID);
+    let title = req.body.title;
+    let description = req.body.description;
+    let inputDesc = req.body.inputDesc;
+    let inputSample = req.body.inputSample;
+    let outputDesc = req.body.outputDesc;
+    let outputSample = req.body.outputSample;
+    let solutionLink = req.body.solutionLink;
+    //sql query for updating table
+    let query = `update Problems set title ='${title}', description = '${description}', inputDescription = '${inputDesc}', sampleInput = '${inputSample}', outputDescription = '${outputDesc}', sampleOutput = '${outputSample}', answer = '${solutionLink}' where questionID = '${probID}'`
+    console.log(query);
+    con.query(
+        query,
+        function (err, result) {
+            if (err) {
+                console.log(`Error in SQL resquest: ${err.message}`);
+                return;
+            }
+            
+        }
+    )
 })
 
 // GET for account page
