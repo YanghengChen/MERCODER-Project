@@ -53,6 +53,7 @@ app.use(sessions({
 app.get('/', function (req, res) {
     session = req.session;
     res.render('pages/home', {
+        username: session.username ? session.username : "",
         loggedIn: session.loggedIn ? true : false
     });
 })
@@ -61,10 +62,7 @@ app.get('/', function (req, res) {
 app.get('/login', function (req, res) {
     session=req.session;
     if(session.username) {
-        res.render('pages/home', {
-            loggedIn: session.loggedIn ? true : false,
-            user: session.username
-        });
+        res.redirect('/');
     } else {
         res.render('pages/login', {
             loggedIn: session.loggedIn ? true : false,

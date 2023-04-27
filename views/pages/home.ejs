@@ -25,8 +25,8 @@
             <div class="masthead-content">
                 <div class="container px-5">
                     <h1 class="masthead-heading mb-0">MERCODER</h1>
-                    <h2 class="masthead-subheading mb-0"></h2>
-                    <a class="btn btn-primary btn-xl rounded-pill mt-5" href="/login">Create Account</a>
+                    <h2 class="masthead-subheading mb-0"><%= loggedIn ? `Welcome back, ${username}` : "" %></h2>
+                    <a class="btn btn-primary btn-xl rounded-pill mt-5" href=<%- loggedIn ? "/list" : "/login" %>><%- loggedIn ? "View Problems" : "Create Account" %></a>
                 </div>
             </div>
             
