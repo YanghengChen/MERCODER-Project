@@ -341,11 +341,27 @@ app.post('/problem/edit/:problemID', function (req, res) {
 // GET for account page
 app.get('/account', function (req, res) {
     session = req.session;
+    let schoolName = "No School";
+    if (session.schoolID != null) {
+        let query = `SELECT schoolName FROM Schools WHERE schoolID = ${session.schoolID}`;
+        con.query(
+            query,
+            function (err, result) {
+                if (err) {
+                    console.log(`Error in SQL resquest: ${err.message}`);
+                    return;
+                }
+                schoolName = result[0].schoolName;
+            }
+        )
+    }
+
     res.render('pages/account', {
         loggedIn: session.loggedIn ? true : false,
-        FullName: "Jaron Anderson",
-        username: "jarbean",
-        Role: "Student"
+        fullName: session.fullName,
+        school: schoolName,
+        roleID: session.roleID,
+        username: session.username,
     });
 })
 
