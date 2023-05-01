@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mercoder Student Submission</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		/* Global styles */
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: 'Roboto', sans-serif;
+			background-color: #252525;
+			color: #fff;
+		}
+
+		/* Header styles */
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px;
+			background-color: #ff5722;
+			color: #fff;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+			position: sticky;
+			top: 0;
+			z-index: 1;
+		}
+
+		.header h1 {
+			margin: 0;
+			font-size: 32px;
+			font-weight: 500;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+		}
+
+		/* Main styles */
+		.main {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 50px;
+			margin-top: 100px;
+		}
+
+		.main h2 {
+			margin-bottom: 20px;
+			font-size: 24px;
+			font-weight: 500;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			text-align: center;
+		}
+
+		.main form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+			max-width: 800px;
+		}
+
+		.main textarea {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 20px;
+			border: none;
+			border-radius: 5px;
+			background-color: #424242;
+			color: #fff;
+			resize: vertical;
+			min-height: 200px;
+		}
+
+		.main button {
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			background-color: #ff5722;
+			color: #fff;
+			font-size: 18px;
+			font-weight: 500;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.main button:hover {
+			background-color: #fff;
+			color: #ff5722;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		.main span {
+			color: #f44336;
+			display: none;
+			margin-bottom: 20px;
+		}
+
+		/* Footer styles */
+		.footer {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			background-color: #ff5722;
+			color: #fff;
+			font-size: 14px;
+			font-weight: 500;
+			text-transform: uppercase;
+		}
+
+		.footer a {
+			color: #fff;
+			font-weight: 700;
+            }
+
+		.footer a:hover {
+			text-decoration: underline;
+		}
+
+	</style>
+</head>
+<body>
+	<header class="header">
+		<h1>Mercoder Student Submission</h1>
+		<div id="status-box"></div>
+	</header>
+	<main class="main">
+		<h2>Coding Question Title</h2>
+		<form id="code-form" onsubmit="submitCode(event)">
+			<textarea id="code-input" placeholder="Enter your code here"></textarea>
+			<button type="submit">Submit</button>
+			<span id="error-message">Please enter code before submitting</span>
+		</form>
+		<button onclick="goBack()">Back</button>
+	</main>
+	<footer class="footer">
+		<p>Created by <a href="https://example.com" target="_blank">Mercoder</a></p>
+	</footer>
+	<script>
+		// Get DOM elements
+		const form = document.getElementById('code-form');
+		const codeInput = document.getElementById('code-input');
+		const statusBox = document.getElementById('status-box');
+		const errorMessage = document.getElementById('error-message');
+
+		// Function to submit code
+		function submitCode(event) {
+			event.preventDefault();
+			if (codeInput.value.trim() === '') {
+				errorMessage.style.display = 'block';
+				return;
+			}
+			// Code submission logic here
+			statusBox.innerHTML = 'Code submitted successfully!';
+			statusBox.style.backgroundColor = '#4CAF50';
+			statusBox.style.display = 'block';
+		}
+
+		// Function to go back to previous page
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</body>
+</html>
