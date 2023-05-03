@@ -203,10 +203,8 @@ app.post('/login', (req, res) => {
 // GET for map page
 app.get('/map/:problem', function (req, res) {
     var probID = req.params.problem;
-    console.log(probID);
     var mapData=[];
     var query = "SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = " + String(probID) + ")";
-    console.log(query);
     con.query(
         query, 
         function (err, result) {
@@ -214,18 +212,15 @@ app.get('/map/:problem', function (req, res) {
                 console.log(`Error in SQL request: ${err.message}`);
                 return;
             }
-            console.log(result.length);
             for(var i = 0; i < result.length; i++){
                 var entry = {
                     username: result[i].userName,
                     lat: result[i].latit,
                     lng: result[i].longit
                 }; 
-                console.log(entry);
                 mapData.push(entry);
             }
             mapData = JSON.stringify(mapData);
-            console.log(mapData);
             res.render('pages/map', {
                 loggedIn: session.loggedIn ? true : false,
                 mapData: JSON.stringify(mapData)
@@ -248,29 +243,23 @@ app.get("/problem/:probID", async (req, res) => {
     let outputDesc;
     let outputSample;
     let result;
-    console.log("probID:" + probID);
     try{
         exist = await executeQuery(query);
         exist = exist.length;
-        console.log(exist);
         if (exist > 0){
             let query = `select userID from Problems where questionID = ${probID}`;
             userID = await executeQuery(query);
             userID = userID[0].userID;
-            console.log(userID);
             query =`select name from Users where userID = ${userID}`;
             authorName = await executeQuery(query);
             authorName = authorName[0].name;
-            console.log(authorName);
             query = `select creationDate from Problems where questionID = ${probID}`;
             date = await executeQuery(query);
             date = JSON.stringify(date[0].creationDate);
-            console.log(date);
             let year = date[1] + date[2] + date[3] + date[4];
             let month = date[6] + date [7];
             let day = date[9] + date[10];
             date = month + "-" + day + "-" + year;
-            console.log(date);
             query = `select title from Problems where questionID = ${probID}`;
             title = await executeQuery(query);
             title = title[0].title;
@@ -317,7 +306,6 @@ app.get('/problem/create', function (req, res) {
 
 // POST for question creation form
 app.post('/problem/create', function (req, res) {
-    console.log("food");
     session = req.session;
     var userID = 8; //needs to be replaced by userID session variable later
     var title = req.body.title;
@@ -328,17 +316,12 @@ app.post('/problem/create', function (req, res) {
     var outputSample = req.body.outputSample;
     var solutionLink = req.body.solutionLink;
     var date = new Date();
-    console.log(date);
     var day = date.getDate();
     var month = date.getMonth()+1;
     var year = date.getFullYear();
     var currDate = year + "-" + month + "-" + day;
-    console.log(currDate);
-    console.log(title);
-    
     //sql to query for inserting values of variables gotten from form into database
     var query = `insert into Problems(userID,title,creationDate,description,answer,sampleInput,sampleOutput,inputDescription,outputDescription) values('${userID}','${title}','${currDate}','${description}','${solutionLink}','${inputSample}','${outputSample}','${inputDesc}','${outputDesc}')`;
-    console.log(query);
     con.query(
         query,
         function (err, result) {
@@ -356,7 +339,6 @@ app.post('/problem/create', function (req, res) {
 app.get('/problem/edit/:problemID', function (req, res) {
     session = req.session;
     if (!session.roleID || session.roleID == 0) {
-        console.log("User does not have permission!");
         res.redirect('/');
         return;
     }
@@ -387,10 +369,8 @@ app.get('/problem/edit/:problemID', function (req, res) {
 
 
 app.post('/problem/edit/:problemID', function (req, res) {
-    console.log("food2");
     session = req.session;
     let probID = req.params.problemID;
-    console.log(probID);
     let title = req.body.title;
     let description = req.body.description;
     let inputDesc = req.body.inputDesc;
@@ -429,8 +409,6 @@ app.get('/account', function (req, res) {
             }
         )
     }
-    console.log("this is schoolID " + session.schoolID);
-    console.log("this is school name " + session.schoolName);
     let schools = [];
     let query = `SELECT schoolName from Schools`;
         con.query(
@@ -440,12 +418,9 @@ app.get('/account', function (req, res) {
                     console.log(`Error in SQL resquest: ${err.message}`);
                     return;
                 }
-                console.log(result);
                 for(let i = 0; i < result.length; i++){
                     schools.push(result[i].schoolName);
                 }
-                console.log(schools);
-    
                 res.render('pages/account', {
                     loggedIn: session.loggedIn ? true : false,
                     fullName: session.fullName,
@@ -481,6 +456,7 @@ app.get('/list', function (req, res) {
     )
 })
 
+//function that gives value and forces program to wait for result of query
 function executeQuery(query) {
     return new Promise((resolve, reject) => {
       con.query(query, (err, result) => {
@@ -494,7 +470,6 @@ function executeQuery(query) {
 }
   
 app.post('/account/edit', async function (req, res) {
-    console.log("hamborger");
     session = req.session;
     let school = {name:" "};
     let realName;
@@ -504,26 +479,15 @@ app.post('/account/edit', async function (req, res) {
       return;
     }
     console.log(session.roleID);
+    //check if logged in user is a student
     if (session.roleID === 0){
       var query = `select schoolID from Schools where schoolName = "${school.name}"`;
-      console.log(query);
-      console.log(school);
-      console.log(school.ID);
-  
       try {
         const result = await executeQuery(query);
-        console.log("length of result: " + result.length);
         schoolID.push(result[0].schoolID);
-        console.log(schoolID);
-        console.log("this is in function " + query);
-  
-        console.log("this is the second one");
-        console.log(schoolID);
         session.schoolID = schoolID;
         //console.log(school.ID);
         query = `update Users set schoolID = ${schoolID[0]} where userID = ${session.userID}`;
-        console.log(query);
-        console.log("this is the out of function on: " + query);
         con.query(
         query,
         function(err, result) {
@@ -538,24 +502,19 @@ app.post('/account/edit', async function (req, res) {
         console.log(`Error in SQL request: ${error.message}`);
       }
     }
+    //check if the role of the user is a teacher.
     if(session.roleID === 1){
         school.name = req.body.newSchool;
-        console.log("top of teacher form");
         query = `select schoolID from Schools where schoolName = "${school.name}"`;
         realName = req.body.fullName;
-        console.log(query);
-
         const result = await executeQuery(query);
-        console.log("length of result: " + result.length);
-        console.log(result);
         if (result.length === 0){
+            //string manipulation for the URL to be sent to google
             var address = req.body.address;
             var city = req.body.city;
             var state = req.body.state;
             var gAddress = `${address} ${city} ${state}`
-            console.log(gAddress);
             gAddress = gAddress.replace(/ /g,'%20');
-            console.log(gAddress);
             var path = "/maps/api/geocode/json?address=" + gAddress + "&key=AIzaSyBns3Cd20dcOsq-JPFkAIRkHsZ_-wAULeU";
             const options = {
                 hostname: 'maps.googleapis.com',
@@ -563,8 +522,7 @@ app.post('/account/edit', async function (req, res) {
                 method: 'GET'
             };
 
-            console.log(options);
-
+            //get lat and long from address
             const geocode_req = await new Promise((resolve, reject) => {
                 const req = https.request(options, (res) => {
                     let data = ''
@@ -586,10 +544,7 @@ app.post('/account/edit', async function (req, res) {
 
             let lat = geocode_req.results[0].geometry.location.lat;
             let lng = geocode_req.results[0].geometry.location.lng;
-            console.log(lat);
-            console.log(lng);
             query = `insert into Schools(schoolName, address, latit, longit) values("${school.name}","${address}","${lat}","${lng}")`;
-            console.log(query);
             con.query(
                 query,
                 function(err, result) {
@@ -602,12 +557,9 @@ app.post('/account/edit', async function (req, res) {
         }
         else{
             schoolID.push(result[0].schoolID);
-            console.log(realName);
             session.fullName = realName;
             session.schoolID = schoolID;
             query = `update Users set schoolID = ${schoolID[0]}, name = "${realName}" where userID = ${session.userID}`;
-            console.log(query);
-            console.log("this is the out of function on: " + query);
             con.query(
             query,
             function(err, result) {
@@ -623,6 +575,7 @@ app.post('/account/edit', async function (req, res) {
     res.redirect('/account');
 });
 
+//get for loading error 404
 app.get('*', function(req, res){
         res.status(404).send(
             "<h1> Error 404: Page Not Found </h1>"
