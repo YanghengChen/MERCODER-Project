@@ -236,7 +236,9 @@ app.get('/map/:problem', function (req, res) {
 app.get("/problem/:probID", (req, res) => {
     session = req.session
     let probID = req.params.probID
-    res.render('pages/problem/problem-view')
+    res.render('pages/problem/problem-view', {
+        loggedIn: session.loggedIn ? true : false,
+    })
 });
 
 // GET for question creation page
