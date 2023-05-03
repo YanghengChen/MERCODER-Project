@@ -4,6 +4,7 @@ const sessions = require('express-session');
 const https = require('https')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const { ECDH } = require('crypto');
 require('ejs');
 const app = express();
 const port = 8080;
@@ -233,12 +234,67 @@ app.get('/map/:problem', function (req, res) {
     )
 })
 
-app.get("/problem/:probID", (req, res) => {
-    session = req.session
-    let probID = req.params.probID
-    res.render('pages/problem/problem-view', {
-        loggedIn: session.loggedIn ? true : false,
-    })
+app.get("/problem/:probID", async (req, res) => {
+    session = req.session;
+    let probID = req.params.probID;
+    let query = `select questionID from Problems where questionID = ${probID}`;
+    let exist;
+    let userID;
+    let authorName;
+    let date;
+    let title;
+    let inputDesc;
+    let inputSample;
+    let outputDesc;
+    let outputSample;
+    let result;
+    console.log("probID:" + probID);
+    try{
+        exist = await executeQuery(query);
+        exist = exist.length;
+        console.log(exist);
+        if (exist > 0){
+            let query = `select userID from Problems where questionID = ${probID}`;
+            userID = await executeQuery(query);
+            userID = userID[0].userID;
+            console.log(userID);
+            query =`select name from Users where userID = ${userID}`;
+            authorName = await executeQuery(query);
+            authorName = authorName[0].name;
+            console.log(authorName);
+            query = `select creationDate from Problems where questionID = ${probID}`;
+            date = await executeQuery(query);
+            date = JSON.stringify(date[0].creationDate);
+            console.log(date);
+            let year = date[1] + date[2] + date[3] + date[4];
+            let month = date[6] + date [7];
+            let day = date[9] + date[10];
+            date = month + "-" + day + "-" + year;
+            console.log(date);
+            query = `select title from Problems where questionID = ${probID}`;
+            title = await executeQuery(query);
+            title = title[0].title;
+            query = `select inputDescription, outputDescription, sampleInput, sampleOutput from Problems where questionID = ${probID}`;
+            result = await executeQuery(query);
+            inputDesc = result[0].inputDescription;
+            outputDesc = result[0].outputDescription;
+            inputSample = result[0].sampleInput;
+            outputSample = result[0].sampleOutput;
+            res.render('pages/problem/problem-view', {
+                loggedIn: session.loggedIn ? true : false,
+                author: authorName,
+                dateCreated: date,
+                title: title,
+                InputDesc: inputDesc,
+                sampleInput: inputSample,
+                outDesc: outputDesc,
+                SampleOut: outputSample,
+
+            })
+        }
+    }catch (error){
+        console.log(`Error in SQL request 267: ${error.message}`);
+    }
 });
 
 // GET for question creation page
