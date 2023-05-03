@@ -5,6 +5,11 @@
 
 <head>
     <%- include(rootDir + '/views/partials/head'); %>
+    <style>
+        label {
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body style="padding-top: 80px;">
@@ -12,32 +17,67 @@
     <%- include(rootDir + '/views/partials/navbar'); %>
 
     <div class="text-center">
-        <h1><%= newProblem ? "Create New Problem" : "Editing" %></h1>
+        <h1><%= newProblem ? "Create New Problem" : `Editing ${title}` %></h1>
     </div>
 
     <!-- Creation Form -->
     <div class="col-4 mx-auto mt-3">
-        <form class="needs-validation" novalidate>
-            <div class="form-group pb-2">
-                <input type="text" class="form-control" id="title" placeholder="Problem Title">
+        <form class="needs-validation" novalidate action=<%- newProblem ? "/problem/create" : `/problem/edit/${probID}` %> method="POST">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" required
+                <%- !newProblem ? `value="${title}"` : 'placeholder="Problem Title"' %>>
+                <div class="invalid-feedback">
+                    Please provide a problem title.
+                </div>
             </div>
-            <div class="form-group pb-2">
-                <textarea class="form-control" id="description" rows="5" placeholder="Problem description"></textarea>
+            <div class="form-group pt-2">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="5" required
+                <%- !newProblem ? `>${description}` : 'placeholder="Problem description">' %></textarea>
+                <div class="invalid-feedback">
+                    Please provide a problem description.
+                </div>
             </div>
-            <div class="form-group pb-2">
-                <textarea class="form-control" id="inputDesc" rows="2" placeholder="Input description"></textarea>
+            <div class="form-group pt-2">
+                <label for="inputDesc">Description of Input</label>
+                <textarea class="form-control" id="inputDesc" name="inputDesc" rows="2" required
+                <%- !newProblem ? `>${inputDesc}` : 'placeholder="Input description">' %></textarea>
+                <div class="invalid-feedback">
+                    Please provide a description of input.
+                </div>
             </div>
-            <div class="form-group pb-2">
-                <textarea class="form-control" id="inputSample" rows="2" placeholder="Sample input"></textarea>
+            <div class="form-group pt-2">
+                <label for="outputDesc">Description of Output</label>
+                <textarea class="form-control" id="outputDesc" name="outputDesc" rows="2" required
+                <%- !newProblem ? `>${outputDesc}` : 'placeholder="Output description">' %></textarea>
+                <div class="invalid-feedback">
+                    Please provide a description of output.
+                </div>
             </div>
-            <div class="form-group pb-2">
-                <textarea class="form-control" id="outputDesc" rows="2" placeholder="Output description"></textarea>
+            <div class="form-group pt-2">
+                <label for="inputSample">Input Sample</label>
+                <textarea class="form-control" id="inputSample" name="inputSample" rows="2" required
+                <%- !newProblem ? `>${inputSample}` : 'placeholder="Sample input">' %></textarea>
+                <div class="invalid-feedback">
+                    Please provide an input sample.
+                </div>
             </div>
-            <div class="form-group pb-2">
-                <textarea class="form-control" id="outputSample" rows="2" placeholder="Sample Output"></textarea>
+            <div class="form-group pt-2">
+                <label for="outputSample">Output Sample</label>
+                <textarea class="form-control" id="outputSample" name="outputSample" rows="2" required
+                <%- !newProblem ? `>${outputSample}` : 'placeholder="Sample Output">' %></textarea>
+                <div class="invalid-feedback">
+                    Please provide an output sample.
+                </div>
             </div>
-            <div class="form-group pb-4">
-                <input type="text" class="form-control" id="solutionLink" aria-describedby="solutionHelp" placeholder="Solution link (ex. https://replit.com/)">
+            <div class="form-group pt-2 pb-4">
+                <label for="solutionLink">Solution Link</label>
+                <input type="text" class="form-control" id="solutionLink" name="solutionLink" aria-describedby="solutionHelp" required
+                <%- !newProblem ? `value="${solutionLink}"` : 'placeholder="Solution link (ex. https://replit.com/)"' %>>
+                <div class="invalid-feedback">
+                    Please provide a solution link.
+                </div>
                 <small id="solutionHelp" class="form-text text-muted">Must be a Replit link.</small>
             </div>
             <button type="submit" class="btn btn-primary"><%= newProblem ? "Create" : "Save" %> </button>
@@ -45,7 +85,10 @@
     </div>
 
     <!-- MDB -->
-    <script src="js/mdb.min.js"></script>
+    <script src="/js/mdb.min.js"></script>
+
+    <!-- Bootstrap Validation Script -->
+    <script src="/js/form-validation.js"></script>
 </body>
 
 </html>

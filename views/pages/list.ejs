@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<% var rootDir = process.cwd() %>
+
+<head>
+  <link href="/css/list.css" rel="stylesheet" type="text/css"/>
+  <%- include(rootDir + '/views/partials/head'); %>
+
+  <!-- JQuery Search filtering-->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <script>
+    $(document).ready( function() {
+      $("#search").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#question-list li").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+</head>
+
+<body style="padding-top: 80px;">
+  <!-- Navbar -->
+  <%- include(rootDir + '/views/partials/navbar'); %>
+
+  <div class="question-list">
+    <h1>Coding Problems</h1>
+    <% if (userRole === 1 || userRole === 2) { %>
+      <div class="text-center pb-4">
+        <a href="/problem/create"><button>Create New Problem</button></a>
+      </div>
+    <% } %>
+    <div class="input-group w-25 mx-auto">
+      <input id="search" type="text" class="form-control" placeholder="Search...">
+    </div>
+    <ul id="question-list">
+      <% for(var i = 0; i < questions.length; i++) { %>
+        <li>
+          <h3><%= questions[i].title %></h3>
+          <p class="question-desc"><%= questions[i].description %></p>
+          <button>View</button>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</body>
+
+</html>

@@ -15,59 +15,75 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
 </head>
 
-<body>
+<body style="padding-top: 80px">
 
-<div class="p-3 mb-2 bg-light bg-gradient text-dark">
 
-<center>
-	<h1>Problem Worldmap</h1>
-</center>
+<h1 style="text-align:center">Problem Worldmap</h1>
  
- <!-- Search bar -->
- <section class="p-4 text-center w-100">
-      <div class="d-grid gap-2 col-6 mx-auto">
-      <div class="input-group">
-			<div class="form-outline">
-				<input type="search" id="form1" class="form-control" />
-				<label class="form-label" for="form1">Search</label>
-      </div>
-			</div>
-        <button type="button" class="btn btn-outline-dark">Search</button>
-      </div>
- </section>
+<!-- Search bar -->
+<section class="p-4 text-center w-100">
+    <div class="d-grid gap-2 col-6 mx-auto">
+    <div class="input-group">
+    <div class="form-outline">
+      <input type="search" id="form1" class="form-control" />
+      <label class="form-label" for="form1">Search</label>
+    </div>
+    </div>
+      <button type="button" class="btn btn-outline-dark">Search</button>
+    </div>
+</section>
+
+<%= mapData[0].username %>
+<%= mapData[0].lat %>
+<%= mapData[0].lng %>
 
 <!-- Map declaration, looping through prob locations.  -->
-<div id="googleMap" style="width:90%;height:800px; margin: 0 auto;"></div>
+<div id="googleMap" class="mx-auto" style="width:90%; height:800px;"></div>
 
 
 <!-- eslint-disable-next-script -->
 <script>
   function myMap() {
-    var locArray = <%= mapData%>; 
+    var locArray = JSON.parse(<%- mapData %>); 
+    console.log(locArray);
+    console.log(locArray[0]);
+    console.log(locArray[0].username);
+
     var mapProp= {
-      center:new google.maps.LatLng(37.0902,-95.7129),
+      center:new google.maps.LatLng(37.0902, -95.7129),
       zoom:5,
     };
 
     var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
-    for (let i = 0; i < locArray.length; i++) {
-      let probMark = new google.maps.Marker({position:new google.maps.LatLng(locArray[i].lat, locArray[i].lng)});
-      probmark.setMap(map);
-      let infowindow = new google.maps.InfoWindow({content:locArray[i].username});
-      google.maps.event.addListener(probMark, 'click', function () { infowindow.open(map, probmark);});
+    for (var i = 0; i < locArray.length; i++) {
+      var answerMark = new google.maps.Marker({
+        position: { lat: locArray[i].lat, lng: locArray[i].lng },
+        animation: google.maps.Animation.DROP
+      });
 
-      google.maps.event.addListener(probMark, 'click', function () {
+      var infowindow = new google.maps.InfoWindow({
+        content:locArray[i].username
+      });
+
+      google.maps.event.addListener(answerMark, 'click', function () { 
+        
+      });
+
+      google.maps.event.addListener(answerMark, 'click', function () {
               var pos = map.getZoom();
               map.setZoom(15);
-              map.setCenter(probMark.getPosition());
+              map.setCenter(answerMark.getPosition());
               window.setTimeout(function() {map.setZoom(pos);}, 3000);
       });
+
+      infowindow.open(map, answerMark);
+      answerMark.setMap(map);
     }
   }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_qLDP04emk0-Vs2WHkg9tz0t4vT24dhw&callback=myMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBns3Cd20dcOsq-JPFkAIRkHsZ_-wAULeU&callback=myMap"></script>
 
 <br>
 

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Student Responses</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            max-width: 2000px;
+            margin: auto;
+            padding: 50px;
+            background-repeat: repeat;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #3a3a3a;
+            font-weight: 700;
+            font-size: 48px;
+            text-shadow: 2px 2px #ccc;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #3a3a3a;
+            font-weight: 700;
+            font-size: 36px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            border: 2px solid #ccc;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Student Responses</h1>
+    <h2></h2>
+    <table>
+		<%
+		  var row;
+		%>
+        <tbody>
+			<% for (let i = 0; i < rows; i++) { %>
+			  <div class="row">
+				<div class="column">Student Name</div>
+				<div class="column">Answer</div>
+			  </div>
+			<% } %>
+        </tbody>
+    </table>
+</body>
+</html>
