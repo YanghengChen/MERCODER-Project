@@ -1,6 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
+const https = require('https')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 require('ejs');
@@ -102,11 +103,14 @@ app.post('/login', (req, res) => {
         con.query(
             `SELECT * FROM Users WHERE userName = '${loginUsername}'`,
             function (err, result) {
-                console.log(result[0].pass);
+                console.log(err);
+                console.log(result);
+                console.log("result below");
+                //console.log(result[0].pass);
                 if (err) {
                     console.log(`Error occurred in SQL request: ${err.message}`);
                 } else {
-                    if(result === "") {
+                    if(!result || result.length === 0) {
                         console.log("Account not found!");
                         res.render('pages/login', {
                             loggedIn: session.loggedIn ? true : false,
@@ -316,6 +320,8 @@ app.get('/problem/edit/:problemID', function (req, res) {
         })
 })
 
+
+
 app.post('/problem/edit/:problemID', function (req, res) {
     console.log("food2");
     session = req.session;
@@ -359,14 +365,35 @@ app.get('/account', function (req, res) {
             }
         )
     }
+    console.log("this is schoolID " + session.schoolID);
+    console.log("this is school name " + session.schoolName);
+    let schools = [];
+    let query = `SELECT schoolName from Schools`;
+        con.query(
+            query,
+            function (err, result) {
+                if (err) {
+                    console.log(`Error in SQL resquest: ${err.message}`);
+                    return;
+                }
+                console.log(result);
+                for(let i = 0; i < result.length; i++){
+                    schools.push(result[i].schoolName);
+                }
+                console.log(schools);
+    
+                res.render('pages/account', {
+                    loggedIn: session.loggedIn ? true : false,
+                    fullName: session.fullName,
+                    school: schoolName,
+                    roleID: session.roleID,
+                    username: session.username,
+                    schools: schools
+                });
+            }
+        )
 
-    res.render('pages/account', {
-        loggedIn: session.loggedIn ? true : false,
-        fullName: session.fullName,
-        school: schoolName,
-        roleID: session.roleID,
-        username: session.username,
-    });
+        
 })
 
 // GET for problem list page
@@ -389,3 +416,145 @@ app.get('/list', function (req, res) {
         }   
     )
 })
+
+function executeQuery(query) {
+    return new Promise((resolve, reject) => {
+      con.query(query, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+}
+  
+app.post('/account/edit', async function (req, res) {
+    console.log("hamborger");
+    session = req.session;
+    let school = {name:" "};
+    let realName;
+    var schoolID = [];
+    school.name = req.body.school;
+    if(school.name === "Select School"){
+      return;
+    }
+    console.log(session.roleID);
+    if (session.roleID === 0){
+      var query = `select schoolID from Schools where schoolName = "${school.name}"`;
+      console.log(query);
+      console.log(school);
+      console.log(school.ID);
+  
+      try {
+        const result = await executeQuery(query);
+        console.log("length of result: " + result.length);
+        schoolID.push(result[0].schoolID);
+        console.log(schoolID);
+        console.log("this is in function " + query);
+  
+        console.log("this is the second one");
+        console.log(schoolID);
+        session.schoolID = schoolID;
+        //console.log(school.ID);
+        query = `update Users set schoolID = ${schoolID[0]} where userID = ${session.userID}`;
+        console.log(query);
+        console.log("this is the out of function on: " + query);
+        con.query(
+        query,
+        function(err, result) {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+            
+        }
+    )
+      } catch (error) {
+        console.log(`Error in SQL request: ${error.message}`);
+      }
+    }
+    if(session.roleID === 1){
+        school.name = req.body.newSchool;
+        console.log("top of teacher form");
+        query = `select schoolID from Schools where schoolName = "${school.name}"`;
+        realName = req.body.fullName;
+        console.log(query);
+
+        const result = await executeQuery(query);
+        console.log("length of result: " + result.length);
+        console.log(result);
+        if (result.length === 0){
+            var address = req.body.address;
+            var city = req.body.city;
+            var state = req.body.state;
+            var gAddress = `${address} ${city} ${state}`
+            console.log(gAddress);
+            gAddress = gAddress.replace(/ /g,'%20');
+            console.log(gAddress);
+            var path = "/maps/api/geocode/json?address=" + gAddress + "&key=AIzaSyBns3Cd20dcOsq-JPFkAIRkHsZ_-wAULeU";
+            const options = {
+                hostname: 'maps.googleapis.com',
+                path: path,
+                method: 'GET'
+            };
+
+            console.log(options);
+
+            const geocode_req = await new Promise((resolve, reject) => {
+                const req = https.request(options, (res) => {
+                    let data = ''
+                    
+                    res.on('data', (chunk) => {
+                        data += chunk;
+                    });
+                    
+                    // Ending the response 
+                    res.on('end', () => {
+                        data = JSON.parse(data);
+                        resolve(data);
+                    });
+                    
+                }).on("error", (err) => {
+                    console.log("Error: ", err);
+                }).end()
+            });
+
+            let lat = geocode_req.results[0].geometry.location.lat;
+            let lng = geocode_req.results[0].geometry.location.lng;
+            console.log(lat);
+            console.log(lng);
+            query = `insert into Schools(schoolName, address, latit, longit) values("${school.name}","${address}","${lat}","${lng}")`;
+            console.log(query);
+            con.query(
+                query,
+                function(err, result) {
+                    if (err) {
+                        console.log(`Error in SQL request: ${err.message}`);
+                        return;
+                    }
+                }
+            )
+        }
+        else{
+            schoolID.push(result[0].schoolID);
+            console.log(realName);
+            session.fullName = realName;
+            session.schoolID = schoolID;
+            query = `update Users set schoolID = ${schoolID[0]}, name = "${realName}" where userID = ${session.userID}`;
+            console.log(query);
+            console.log("this is the out of function on: " + query);
+            con.query(
+            query,
+            function(err, result) {
+                if (err) {
+                    console.log(`Error in SQL request: ${err.message}`);
+                    return;
+                }
+                
+            }
+        )}
+    }
+    req.session.save();
+    res.redirect('/account');
+});

@@ -4,8 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <%- include('../partials/head'); %>
+  <script>
+    $('#selectSchool li').on('click', function(){
+      $('#submitSchool').val($(this).text());
+    });
+  </script>
 </head>
 
 <body>
@@ -16,6 +22,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 offset-lg-2">
+          <% if (roleID === 1 || roleID === 2) { %>
           <div class="row mb-2">
             <div class="col-sm-3">
               <p class="mb-0 font-weight-bold">Full Name</p>
@@ -25,6 +32,7 @@
             </div>
           </div>
           <hr>
+          <% } %>
           <div class="row mb-2">
             <div class="col-sm-3">
               <p class="mb-0 font-weight-bold">Username</p>
@@ -75,15 +83,43 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="edit-form" action="POST">
-            <div class="form-group">
-              <label for="full-name">Full Name</label>
-              <input type="text" class="form-control" id="full-name-input" value="<%= fullName %>">
-            </div>
-            <div class="form-group">
-              <label for="school">School</label>
-              <input type="text" class="form-control" id="school" value="<%= school %>">
-            </div>
+          <% if (roleID === 0) { %> 
+            <form id="edit-form-student" method="POST" action="/account/edit">
+              <select class="form-select" aria-label="Default select example" name="school">
+                <option selected>Select School</option>
+                  <% schools.forEach((school) => { %>
+                  <option value="<%= school %>"><%= school %></option>
+                  <% }) %>
+                </select>
+          <% } else if (roleID === 1) { %>
+            <form id="edit-form-teacher" method="POST" action="/account/edit">
+              <h4 class="font-weight-bold" for="inputCity">Personal Information</h4>
+              <div class="form-group" style="margin-bottom: 20px">
+                <label for="fullName">Full Name</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" value="<%= fullName %>">
+              </div>
+              <h4 class="font-weight-bold" for="inputCity">School Information</h4>
+              <div class="form-group">
+                <label for="schoolName">School Name
+                </label>
+                <input type="text" class="form-control" id="schoolName" name="newSchool" style="margin-top:0px" placeholder="Mercer University">
+              </div>
+              <div class="form-group">
+                <label for="inputAddress">Address
+                </label>
+                <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St">
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCity">City</label>
+                  <input type="text" class="form-control" id="inputCity" name="city">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputState">State / Country</label>
+                  <input type="text" class="form-control" id="inputState" name="state">
+                </div>
+              </div>
+          <% } %> 
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
             </div>
