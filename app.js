@@ -400,7 +400,7 @@ app.get('/account', function (req, res) {
 app.get('/list', function (req, res) {
     session = req.session;
     // var questions = [];
-    var query = 'SELECT title, description FROM Problems';
+    var query = 'SELECT title, description, questionID FROM Problems';
     con.query(
         query, 
         function (err, result) {
