@@ -4,50 +4,14 @@
 <html>
   <head>
     <title>Coding Question</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f7f7f7;
-      }
-      .container {
-        width: 80%;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      }
-      h1 {
-        font-size: 36px;
-        margin-bottom: 20px;
-        color: #ff8c00;
-      }
-      p {
-        font-size: 18px;
-        line-height: 1.5;
-        color: #333333;
-      }
-      .box {
-        border: 1px solid #cccccc;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 20px;
-      }
-      h2 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        color: #333333;
-      }
-    </style>
     <%- include(rootDir + '/views/partials/head'); %>
+    <link href="/css/problem-view.css" rel="stylesheet" type="text/css"/>
   </head>
-  <body style="padding-top: 60px">
-    <!-- Navbar -->
-    <%- include(rootDir + '/views/partials/navbar'); %>
+<body style="padding-top: 90px">
+  <!-- Navbar -->
+  <%- include(rootDir + '/views/partials/navbar'); %>
 
-    <div class="container">
+  <div class="container problem-view">
       <h1>Coding Question Title</h1>
       <% var author = "TempAuthor" %>
       <% var dateCreated = "TempCreated" %>
@@ -65,7 +29,7 @@
           InputDesc;
         </p>
       </div>
-    
+  
       <div class="box">
         <h2>Sample Input</h2>
         <% var sampleInput= "TempInput" %>
@@ -74,7 +38,7 @@
           sampleInput;
         </p>
       </div>
-    
+  
       <div class="box">
         <h2>Output Description</h2>
         <% var outDesc = "TempOutDesc" %>
@@ -83,13 +47,14 @@
           outDesc;
         </p>
       </div>
-    
+  
       <div class="box">
         <h2>Sample Output</h2>
         <% var SampleOut = "TempOut" %>
         <p>
           SampleOut;
         <p>
-      <div>
-
+      </div>
+  </div>
+  </body>
 <html>
