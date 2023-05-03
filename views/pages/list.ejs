@@ -40,7 +40,7 @@
         <li>
           <h3><%= questions[i].title %></h3>
           <p class="question-desc"><%= questions[i].description %></p>
-          <button href='/problem/<%= questions[i].questionID %>'>View</button>
+          <a href='/problem/<%= questions[i].questionID %>'><button >View</button></a>
         </li>
       <% } %>
     </ul>
