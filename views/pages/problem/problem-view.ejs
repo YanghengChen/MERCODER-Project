@@ -12,10 +12,9 @@
   <%- include(rootDir + '/views/partials/navbar'); %>
 
   <div class="container problem-view">
-      <h1>Coding Question Title</h1>
-      <% var author = "TempAuthor" %>
-      <% var dateCreated = "TempCreated" %>
-      <% var description = "Tempdescript" %>
+
+      <h1><%= title %></h1>
+      
 
       <p>Created by <%=author %> on <%=dateCreated %> <p>
       <p>
@@ -23,36 +22,36 @@
       </p>
       <div class="box">
         <h2>Input Description</h2>
-        <% var InputDesc = "TempInputDesc" %>
+        
 
         <p>
-          InputDesc;
+          <%= InputDesc %>
         </p>
       </div>
   
       <div class="box">
         <h2>Sample Input</h2>
-        <% var sampleInput= "TempInput" %>
+        
 
         <p>
-          sampleInput;
+          <%= sampleInput %>
         </p>
       </div>
   
       <div class="box">
         <h2>Output Description</h2>
-        <% var outDesc = "TempOutDesc" %>
+        
 
         <p>
-          outDesc;
+          <%= outDesc %>
         </p>
       </div>
   
       <div class="box">
         <h2>Sample Output</h2>
-        <% var SampleOut = "TempOut" %>
+        
         <p>
-          SampleOut;
+          <%= SampleOut %>
         <p>
       </div>
   </div>
