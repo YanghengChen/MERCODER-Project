@@ -292,9 +292,13 @@ app.get("/problem/:probID", async (req, res) => {
 
             })
         }
+        else{
+            res.redirect('/error');
+        }
     }catch (error){
         console.log(`Error in SQL request 267: ${error.message}`);
     }
+    
 });
 
 // GET for question creation page
@@ -617,4 +621,11 @@ app.post('/account/edit', async function (req, res) {
     }
     req.session.save();
     res.redirect('/account');
+});
+
+app.get('*', function(req, res){
+        res.status(404).send(
+            "<h1> Error 404: Page Not Found </h1>"
+        );
+    
 });
