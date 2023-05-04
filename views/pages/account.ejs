@@ -165,6 +165,67 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" onclick="submitForm()">Save</button>
           </div>
+          <div class="text-center mt-2">
+            <div id="profile" class="col-lg-8 offset-lg-2">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Edit Profile
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editing Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <% if (roleID === 0) { %> 
+            <form id="edit-form-student" method="POST" action="/account/edit">
+              <select class="form-select" aria-label="Default select example" name="school">
+                <option selected>Select School</option>
+                  <% schools.forEach((school) => { %>
+                  <option value="<%= school %>"><%= school %></option>
+                  <% }) %>
+                </select>
+          <% } else if (roleID === 1) { %>
+            <form id="edit-form-teacher" method="POST" action="/account/edit">
+              <h4 class="font-weight-bold" for="inputCity">Personal Information</h4>
+              <div class="form-group" style="margin-bottom: 20px">
+                <label for="fullName">Full Name</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" value="<%= fullName %>">
+              </div>
+              <h4 class="font-weight-bold" for="inputCity">School Information</h4>
+              <div class="form-group">
+                <label for="schoolName">School Name
+                </label>
+                <input type="text" class="form-control" id="schoolName" name="newSchool" style="margin-top:0px" placeholder="Mercer University">
+              </div>
+              <div class="form-group">
+                <label for="inputAddress">Address
+                </label>
+                <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St">
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCity">City</label>
+                  <input type="text" class="form-control" id="inputCity" name="city">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputState">State / Country</label>
+                  <input type="text" class="form-control" id="inputState" name="state">
+                </div>
+              </div>
+          <% } %> 
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
