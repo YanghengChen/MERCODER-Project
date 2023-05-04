@@ -229,7 +229,7 @@ app.get('/map/:problem', function (req, res) {
     )
 })
 
-app.get("/problem/:probID", async (req, res) => {
+app.get("/problem/view/:probID", async (req, res) => {
     session = req.session;
     let probID = req.params.probID;
     let query = `select questionID from Problems where questionID = ${probID}`;
