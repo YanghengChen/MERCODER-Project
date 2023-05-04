@@ -251,16 +251,20 @@ app.get("/problem/view/:probID", async (req, res) => {
             }
 
             // Convert Date to Readable String
-            let date = new Date(result[0].creationDate);
-            let month = date.toLocaleDateString('en-US', {month: 'long'});
-            let day = date.getDate();
-            let year = date.getFullYear();
-            let weekday = date.toLocaleDateString('en-US', {weekday: 'long'});
-            date = weekday + ' ' + month + ' ' + day + ' '  + year
-            result[0].creationDate = date
+            function sqlDateToStr(sqlDate) {
+                let date = new Date(sqlDate);
+                let month = date.toLocaleDateString('en-US', {month: 'long'});
+                let day = date.getDate();
+                let year = date.getFullYear();
+                let weekday = date.toLocaleDateString('en-US', {weekday: 'long'});
+                date = weekday + ' ' + month + ' ' + day + ' '  + year
+                return date
+            }
+            
+            result[0].creationDate = sqlDateToStr(result[0].creationDate)
 
             let problemData = result[0]
-            var solutionData=[];
+            var solutionData = new Array();
             con.query(
             `SELECT * FROM Users 
             INNER JOIN Schools ON Users.schoolID = Schools.schoolID 
@@ -270,22 +274,23 @@ app.get("/problem/view/:probID", async (req, res) => {
                     console.log(`Error in SQL request: ${err.message}`);
                     return;
                 }
+
                 for(var i = 0; i < result.length; i++){
                     var entry = {
                         username: result[i].userName,
-
+                        answer: result[i].answer,
+                        date: sqlDateToStr(result[i].creationDate),
                         lat: result[i].latit,
                         lng: result[i].longit
                     }; 
                     solutionData.push(entry);
                 }
                 console.log(solutionData)
-                solutionData = JSON.stringify(solutionData);
                 res.render('pages/problem/problem-view', {
                     loggedIn: session.loggedIn ? true : false,
                     problemData: problemData,
                     roleID: session.roleID,
-                    solutionData: JSON.stringify(solutionData)
+                    solutionData: solutionData
                 })
             })
         }
@@ -576,6 +581,23 @@ app.post('/account/edit', async function (req, res) {
     req.session.save();
     res.redirect('/account');
 });
+
+app.post('/problem/submitSolution/:probID', (req, res) => {
+    let probID = req.params.probID;
+    let answer = req.body.answer;
+    con.query(
+        `INSERT INTO Answers (questionID, answer, userID, answerStatus, creationDate)
+        VALUES (${probID}, ${answer}, ${session.userID}, 1, NOW())`,
+        (err, result) => {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+
+            console.log("Solution successfully added.")
+        }
+    )
+})
 
 //get for loading error 404
 app.get('*', function(req, res){

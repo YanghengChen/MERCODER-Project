@@ -13,6 +13,15 @@
     padding: 10px;
     margin-top: 20px;
 }
+.problem-view .solutions {
+    font-size: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; 
+}
+.problem-view .solutions #header {
+    font-size: 18px;
+}
 .problem-view h2 {
     font-size: 22px;
     margin-bottom: 10px;

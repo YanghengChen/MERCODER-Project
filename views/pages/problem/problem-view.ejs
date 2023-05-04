@@ -58,9 +58,24 @@
     </div>
     <div class="row mb-4">
       <h1>Student Solutions</h1>
-      <div class="col-4">
-
-      </div>
+        <table class="table table-striped table-bordered table-sm text-center solutions">
+          <thead class="table-dark" id="header">
+            <tr>
+              <th scope="col">Student</th>
+              <th scope="col">Answer</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0; i < solutionData.length; i++) { %>
+              <tr>
+                <td><%= solutionData[i].userName %></td>
+                <td><%= solutionData[i].answer %></td>
+                <td><%= solutionData[i].date %></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
     </div>
     <div class="row mb-4">
       <h1>Answers Solutions</h1>
@@ -72,7 +87,7 @@
 
 <script>
   function myMap() {
-    var locArray = JSON.parse(<%- solutionData %>); 
+    var locArray = JSON.parse(<%- JSON.stringify(solutionData) %>); 
     console.log(locArray);
     console.log(locArray[0]);
     console.log(locArray[0].username);
