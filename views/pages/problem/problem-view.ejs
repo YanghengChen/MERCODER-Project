@@ -49,9 +49,11 @@
       </div>
       <div class="col d-flex align-items-end">
         <% if (roleID=== 0) { %>
-          <button class="btn btn-primary mx-auto">Submit Answer</button>
+          <button type="button" class="btn btn-primary mx-auto" data-bs-toggle="modal" data-bs-target="#answerModal">
+            Submit Answer
+          </button>
         <% } %>
-        <% if (roleID === 1) { %>
+        <% if (roleID === 1 && userID == problemData.userID) { %>
           <a href="/problem/edit/" class="btn btn-primary mx-auto">Edit Problem</a>
         <% } %>
       </div>
@@ -78,8 +80,32 @@
         </table>
     </div>
     <div class="row mb-4">
-      <h1>Answers Solutions</h1>
+      <h1>Solutions Map</h1>
       <div id="googleMap" class="mx-auto" style="width:100%; height:800px;"></div>
+    </div>
+
+    <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="answerModalLabel">Answer Submission</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="answerForm" class="needs-validation mb-2" method="POST" action="/problem/submitSolution/<%= problemData.questionID %>" novalidate>
+              <label for="answer">Replit Link</label>
+              <input type="url" class="form-control" id="answer" name="answer" placeholder="https://replit.com/" required>
+              <div class="invalid-feedback">
+                Please provide a link to your answer.
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="submitAnswerForm()">Submit</button>
+          </div>
+        </div>
+      </div> 
     </div>
 </div>
 
@@ -87,10 +113,7 @@
 
 <script>
   function myMap() {
-    var locArray = JSON.parse(<%- JSON.stringify(solutionData) %>); 
-    console.log(locArray);
-    console.log(locArray[0]);
-    console.log(locArray[0].username);
+    var locArray = JSON.parse("<%= JSON.stringify(solutionData) %>"); 
 
     var mapProp= {
       center:new google.maps.LatLng(37.0902, -95.7129),
@@ -127,6 +150,27 @@
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBns3Cd20dcOsq-JPFkAIRkHsZ_-wAULeU&callback=myMap"></script>
+
+<script>
+  submitAnswerForm = function () {
+      answerForm = document.getElementById("answerForm")
+      if (!answerForm.checkValidity()) {
+          console.log("Form not valid!")
+          // Add 'is-invalid' class to invalid fields
+          answerForm.querySelectorAll('.form-control, .form-select').forEach(function(input) {
+              if (!input.validity.valid) {
+                  input.classList.add('is-invalid');
+              } else {
+                  input.classList.remove('is-invalid');
+              }
+          });
+
+          return
+      }
+
+      answerForm.submit();
+  };
+</script>
 
 </body>
 <html>

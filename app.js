@@ -290,6 +290,7 @@ app.get("/problem/view/:probID", async (req, res) => {
                     loggedIn: session.loggedIn ? true : false,
                     problemData: problemData,
                     roleID: session.roleID,
+                    userID: session.userID,
                     solutionData: solutionData
                 })
             })
@@ -587,7 +588,7 @@ app.post('/problem/submitSolution/:probID', (req, res) => {
     let answer = req.body.answer;
     con.query(
         `INSERT INTO Answers (questionID, answer, userID, answerStatus, creationDate)
-        VALUES (${probID}, ${answer}, ${session.userID}, 1, NOW())`,
+        VALUES (${probID}, '${answer}', ${session.userID}, 1, NOW())`,
         (err, result) => {
             if (err) {
                 console.log(`Error in SQL request: ${err.message}`);
