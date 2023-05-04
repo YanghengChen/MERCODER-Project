@@ -48,12 +48,12 @@
         </div>
       </div>
       <div class="col d-flex align-items-end">
-        <% if (roleID=== 0) { %>
+        <% if (roleID === 0) { %>
           <button type="button" class="btn btn-primary mx-auto" data-bs-toggle="modal" data-bs-target="#answerModal">
             Submit Answer
           </button>
         <% } %>
-        <% if (roleID === 1 && userID == problemData.userID) { %>
+        <% if (roleID === 1 && userID === problemData.userID) { %>
           <a href="/problem/edit/" class="btn btn-primary mx-auto">Edit Problem</a>
         <% } %>
       </div>

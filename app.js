@@ -316,7 +316,7 @@ app.get('/problem/create', function (req, res) {
 // POST for question creation form
 app.post('/problem/create', function (req, res) {
     session = req.session;
-    var userID = 8; //needs to be replaced by userID session variable later
+    var userID = session.userID;
     var title = req.body.title;
     var description = req.body.description;
     var inputDesc = req.body.inputDesc;
@@ -342,6 +342,7 @@ app.post('/problem/create', function (req, res) {
         }
     )
     
+    res.redirect(`/problem/view/${probID}`
 })
 
 // GET for question editing
@@ -354,25 +355,25 @@ app.get('/problem/edit/:problemID', function (req, res) {
     let probID = req.params.problemID;
     let query = `SELECT * FROM Problems WHERE questionID = ${probID}`;
     con.query(
-        query,
-        function (err, result) {
-            if (err) {
-                console.log(`Error in SQL resquest: ${err.message}`);
-                return;
-            }
-            res.render('pages/problem/edit', {
-                loggedIn: session.loggedIn ? true : false,
-                newProblem: false,
-                probID: probID,
-                title: result[0].title,
-                description: result[0].description,
-                inputDesc: result[0].inputDescription,
-                inputSample: result[0].sampleInput,
-                outputDesc: result[0].outputDescription,
-                outputSample: result[0].sampleOutput,
-                solutionLink: result[0].answer
-            })
+    query,
+    function (err, result) {
+        if (err) {
+            console.log(`Error in SQL resquest: ${err.message}`);
+            return;
+        }
+        res.render('pages/problem/edit', {
+            loggedIn: session.loggedIn ? true : false,
+            newProblem: false,
+            probID: probID,
+            title: result[0].title,
+            description: result[0].description,
+            inputDesc: result[0].inputDescription,
+            inputSample: result[0].sampleInput,
+            outputDesc: result[0].outputDescription,
+            outputSample: result[0].sampleOutput,
+            solutionLink: result[0].answer
         })
+    })
 })
 
 
@@ -399,6 +400,8 @@ app.post('/problem/edit/:problemID', function (req, res) {
             }
         }
     )
+
+    res.redirect(`/problem/view/${probID}`)
 })
 
 // GET for account page
