@@ -30,7 +30,7 @@
         <div class="tab-content">
             <div class="tab-pane fade <%= activeTab === 'login' ? 'show active' : '' %>" id="pills-login"
                 role="tabpanel" aria-labelledby="tab-login">
-                <form action="/" method="POST">
+                <form action="/login" method="POST">
                     <!-- Username input -->
                     <div class="form-outline mb-4">
                         <input type="username" id="loginUsername" name="loginUsername" class="form-control" />
@@ -85,7 +85,7 @@
                     </div>
 
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-block mb-3">Register</button>
                 </form>
 
                 <!-- Placeholder for error if username exists or password does not match -->

@@ -4,135 +4,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <style>
-    html,
-    body {
-      height: 100%;
-      margin: auto;
-    }
-
-    section.bg-light {
-      background-color: #f8f9fa;
-      height: 100%;
-    }
-
-    .container {
-      height: 100%;
-      display: 100%;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .card {
-      border: none;
-      box-shadow: 10px 10px 10px rgba(10, 10, 10, 0.5);
-      border-radius: 50px;
-      transition: transform 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card-body.text-center {
-      position: relative;
-    }
-
-
-    .font-weight-bold {
-      font-weight: bold;
-    }
-
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-      font-weight: bold;
-      letter-spacing: 1px;
-      transition: all 0.3s;
-    }
-
-    .btn-primary:hover {
-      background-color: #0069d9;
-      border-color: #0062cc;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    hr {
-      border-top: 1px solid #dee2e6;
-      margin: 1rem 0;
-    }
-
-    .text-muted {
-      color: #6c757d;
-    }
-	button{
-     Display:block;
-     Margin: auto;
-	}
-	
-
-
-  </style>
+  <%- include('../partials/head'); %>
+  <script>
+    $('#selectSchool li').on('click', function(){
+      $('#submitSchool').val($(this).text());
+    });
+  </script>
 </head>
 
-<body style="padding-top: 80px">
-  <!-- Navbar -->
+<body>
+  <!-- Navigation-->
   <%- include('../partials/navbar'); %>
 
-  <section class="bg-light py-5">
+  <section class="bg-light pb-5" style="padding-top: 90px">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4">
-          <div class="card-body text-center">
-            <div class="profile-picture mb-4">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" class="rounded-circle img-fluid" style="width: 250px;">
-            </div>
-            <div class="upload-button ">
-              <form action="/upload" method="post" enctype="multipart/form-data">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="profilePicture" name="profilePicture">
-                  <label class="custom-file-label" for="profilePicture">Choose file</label>
-                </div>
-                <button type="submit " class="btn btn-primary">Upload</button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-8">
-          <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <% if (roleID === 1 || roleID === 2) { %>
+          <div class="row mb-2">
             <div class="col-sm-3">
               <p class="mb-0 font-weight-bold">Full Name</p>
             </div>
             <div class="col-sm-9">
-              <p class="text-muted mb-0"> <%= FullName %></p>
+              <p class="text-muted mb-0" id="full-name"><%= fullName %></p>
             </div>
           </div>
           <hr>
-          <div class="row">
+          <% } %>
+          <div class="row mb-2">
             <div class="col-sm-3">
               <p class="mb-0 font-weight-bold">Username</p>
             </div>
             <div class="col-sm-9">
-              <p class="text-muted mb-0"> <%= username %></p>
+              <p class="text-muted mb-0" id="username"><%= username %></p>
             </div>
           </div>
           <hr>
-          <div class="row">
+          <div class="row mb-2">
             <div class="col-sm-3">
               <p class="mb-0 font-weight-bold">Role</p>
             </div>
             <div class="col-sm-9">
-              <p class="text-muted mb-0"> <%= Role %></p>
+              <p class="text-muted mb-0" id="role">
+                <% if (roleID === 0) { %> Student <% } %>
+                <% if (roleID === 1) { %> Teacher <% } %>
+                <% if (roleID === 2) { %> Admin <% } %>
+              </p>
             </div>
           </div>
-          <div class="text-center mt-4">
-            <button type="button" class="btn btn-primary">Edit Profile</button>
+          <hr>
+          <div class="row mb-2 pb-3">
+            <div class="col-sm-3">
+              <p class="mb-0 font-weight-bold">School</p>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0" id="school"><%= school %></p>
+            </div>
           </div>
+          <div class="text-center mt-2">
+            <div id="profile" class="col-lg-8 offset-lg-2">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Edit Profile
+              </button>
+            </div>
         </div>
       </div>
     </div>
-  </section>
 
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editing Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <% if (roleID === 0) { %> 
+            <form id="edit-form-student" method="POST" action="/account/edit">
+              <select class="form-select" aria-label="Default select example" name="school">
+                <option selected>Select School</option>
+                  <% schools.forEach((school) => { %>
+                  <option value="<%= school %>"><%= school %></option>
+                  <% }) %>
+                </select>
+          <% } else if (roleID === 1) { %>
+            <form id="edit-form-teacher" method="POST" action="/account/edit">
+              <h4 class="font-weight-bold" for="inputCity">Personal Information</h4>
+              <div class="form-group" style="margin-bottom: 20px">
+                <label for="fullName">Full Name</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" value="<%= fullName %>">
+              </div>
+              <h4 class="font-weight-bold" for="inputCity">School Information</h4>
+              <div class="form-group">
+                <label for="schoolName">School Name
+                </label>
+                <input type="text" class="form-control" id="schoolName" name="newSchool" style="margin-top:0px" placeholder="Mercer University">
+              </div>
+              <div class="form-group">
+                <label for="inputAddress">Address
+                </label>
+                <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St">
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCity">City</label>
+                  <input type="text" class="form-control" id="inputCity" name="city">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputState">State / Country</label>
+                  <input type="text" class="form-control" id="inputState" name="state">
+                </div>
+              </div>
+          <% } %> 
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
 </body>

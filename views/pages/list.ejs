@@ -3,7 +3,6 @@
 <% var rootDir = process.cwd() %>
 
 <head>
-  <title>Coding Problems</title>
   <link href="/css/list.css" rel="stylesheet" type="text/css"/>
   <%- include(rootDir + '/views/partials/head'); %>
 
@@ -15,7 +14,7 @@
       $("#search").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $("#question-list li").filter(function() {
-          $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
       });
     });
@@ -28,6 +27,11 @@
 
   <div class="question-list">
     <h1>Coding Problems</h1>
+    <% if (userRole === 1 || userRole === 2) { %>
+      <div class="text-center pb-4">
+        <a href="/problem/create"><button>Create New Problem</button></a>
+      </div>
+    <% } %>
     <div class="input-group w-25 mx-auto">
       <input id="search" type="text" class="form-control" placeholder="Search...">
     </div>
