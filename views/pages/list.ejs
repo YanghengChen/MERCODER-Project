@@ -37,10 +37,16 @@
     </div>
     <ul id="question-list">
       <% for(var i = 0; i < questions.length; i++) { %>
-        <li>
-          <h3><%= questions[i].title %></h3>
-          <p class="question-desc"><%= questions[i].description %></p>
-          <a href='/problem/view/<%= questions[i].questionID %>' type="button" class="btn btn-primary">View</a>
+        <li style="height: 300px;">
+          <div class="mb-3" style="height: 20%; overflow: hidden; text-overflow: ellipsis">
+            <h3><%= questions[i].title %></h3>
+          </div>
+          <div class="mb-2" style="height: 58%; overflow:hidden; text-overflow: ellipsis">
+            <p class="question-desc"><%= questions[i].description %></p>
+          </div>
+          <div>
+            <a href='/problem/view/<%= questions[i].questionID %>' type="button" class="btn btn-primary">View</a>
+          </div>
         </li>
       <% } %>
     </ul>
