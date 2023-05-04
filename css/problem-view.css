@@ -1,0 +1,29 @@
+.problem-view h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.problem-view p {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333333;
+}
+.problem-view .box {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+}
+.problem-view .solutions {
+    font-size: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; 
+}
+.problem-view .solutions #header {
+    font-size: 18px;
+}
+.problem-view h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #333333;
+}
