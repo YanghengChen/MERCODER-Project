@@ -113,7 +113,7 @@
 
 <script>
   function myMap() {
-    var locArray = JSON.parse("<%= JSON.stringify(solutionData) %>"); 
+    var locArray = JSON.parse('<%- JSON.stringify(solutionData) %>'); 
 
     var mapProp= {
       center:new google.maps.LatLng(37.0902, -95.7129),
