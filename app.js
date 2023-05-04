@@ -341,8 +341,13 @@ app.post('/problem/create', function (req, res) {
             
         }
     )
-    
-    res.redirect(`/problem/view/${probID}`
+
+    con.query(
+        `SELECT questionID FROM Problems ORDER BY questionID DESC LIMIT 1`,
+        (err, result) => {
+            res.redirect(`/problem/view/${result[0].questionID}`)
+        }
+    )
 })
 
 // GET for question editing
