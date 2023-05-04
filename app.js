@@ -353,7 +353,7 @@ app.post('/problem/create', function (req, res) {
 // GET for question editing
 app.get('/problem/edit/:problemID', function (req, res) {
     session = req.session;
-    if (!session.roleID || session.roleID == 0) {
+    if (!(session.roleID) || session.roleID == 0) {
         res.redirect('/');
         return;
     }
@@ -366,6 +366,12 @@ app.get('/problem/edit/:problemID', function (req, res) {
             console.log(`Error in SQL resquest: ${err.message}`);
             return;
         }
+
+        if (result[0].userID != session.userID) {
+            res.redirect('/list')
+            return
+        }
+
         res.render('pages/problem/edit', {
             loggedIn: session.loggedIn ? true : false,
             newProblem: false,
