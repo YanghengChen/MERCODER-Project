@@ -54,7 +54,7 @@
           </button>
         <% } %>
         <% if (roleID === 1 && userID === problemData.userID) { %>
-          <a href="/problem/edit/" class="btn btn-primary mx-auto">Edit Problem</a>
+          <a href="/problem/edit/<%= problemData.questionID %>" class="btn btn-primary mx-auto">Edit Problem</a>
         <% } %>
       </div>
     </div>
