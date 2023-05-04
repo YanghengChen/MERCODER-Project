@@ -114,7 +114,7 @@
                   <% }) %>
               </select>
               <div class="invalid-feedback">
-                "Please select a school."
+                Please select a school.
               </div>
           <% } else if (roleID === 1) { %>
             <form id="editForm" class="needs-validation" method="POST" action="/account/edit" novalidate>
@@ -123,7 +123,7 @@
                 <label for="fullName">Full Name</label>
                 <input type="text" class="form-control" id="fullName" name="fullName" value="<%= fullName %>" required>
                 <div class="invalid-feedback">
-                  "Please provide your full name."
+                  Please provide your full name.
                 </div>
               </div>
               <h4 class="font-weight-bold" for="inputCity">School Information</h4>
@@ -132,7 +132,7 @@
                 </label>
                 <input type="text" class="form-control" id="schoolName" name="newSchool" placeholder="Mercer University" required>
                 <div class="invalid-feedback">
-                  "Please provide your school's name."
+                  Please provide your school's name.
                 </div>
               </div>
               <div class="form-group mt-2">
@@ -140,7 +140,7 @@
                 </label>
                 <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St" required>
                 <div class="invalid-feedback">
-                  "Please provide your street address."
+                  Please provide your street address.
                 </div>
               </div>
               <div class="form-row mt-2">
@@ -148,14 +148,14 @@
                   <label for="inputCity">City</label>
                   <input type="text" class="form-control" id="inputCity" name="city" required>
                   <div class="invalid-feedback">
-                    "Please provide the city."
+                    Please provide your city.
                   </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputState">State / Country</label>
                   <input type="text" class="form-control" id="inputState" name="state" required>
                   <div class="invalid-feedback">
-                    "Please provide your state/province."
+                    Please provide your state/province.
                   </div>
                 </div>
               </div>
