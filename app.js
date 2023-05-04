@@ -5,6 +5,7 @@ const https = require('https')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const { ECDH } = require('crypto');
+const bcrypt = require('bcrypt');
 require('ejs');
 const app = express();
 const port = 8080;
@@ -82,6 +83,26 @@ app.get('/logout', function (req, res) {
     res.redirect('/login');
 })
 
+//functions for bycrpyt hashing
+async function hashPassword(plaintextPassword,userName,role) {
+    const hash = await bcrypt.hash(plaintextPassword, 10);
+    // Store hash in the database
+    let query = `insert into Users(userName,pass,roleID) values('${userName}','${hash}',${role})`;
+    con.query(
+        query,
+        function (err) {
+            if (err) {
+                console.log(`Error occurred in SQL request: ${err.message}`);
+            }
+        }
+    );
+}
+
+// compare password
+async function comparePassword(plaintextPassword, hash) {
+    const result = await bcrypt.compare(plaintextPassword, hash);
+    return result;
+}
 // POST for login/registration
 app.post('/login', (req, res) => {
     session = req.session;
@@ -91,6 +112,7 @@ app.post('/login', (req, res) => {
     var registerPassword = req.body.registerPassword;
     var registerRepeatPassword = req.body.registerRepeatPassword;
     var roleSelection = req.body.roleSelection;
+
     console.log(`
         ${loginUsername}
         ${loginPassword}
@@ -149,16 +171,7 @@ app.post('/login', (req, res) => {
                         console.log(`Error occurred in SQL request: ${err.message}`);
                     } else {
                         if (result.length === 0) {
-                            con.query(
-                                `INSERT INTO \`Users\`(\`userName\`, \`pass\`, \`roleID\`) VALUES ('${registerUsername}', '${registerPassword}', ${roleSelection})`,
-                                function (err) {
-                                    if (err) {
-                                        console.log(`Error occurred in SQL request: ${err.message}`);
-                                    } else {
-                                        console.log(`Added new user ${registerUsername} to database!`);
-                                    }
-                                }
-                            );
+                            hashPassword(registerPassword,registerUsername,roleSelection);
                             res.render('pages/login', {
                                 loggedIn: session.loggedIn ? true : false,
                                 confirm: "Account successfully created",
