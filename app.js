@@ -204,7 +204,7 @@ app.post('/login', (req, res) => {
 app.get('/map/:problem', function (req, res) {
     var probID = req.params.problem;
     var mapData=[];
-    var query = "SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = " + String(probID) + ")";
+    var query = `SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = ${probID})`;
     con.query(
         query, 
         function (err, result) {
@@ -232,62 +232,61 @@ app.get('/map/:problem', function (req, res) {
 app.get("/problem/view/:probID", async (req, res) => {
     session = req.session;
     let probID = req.params.probID;
-    let query = `select questionID from Problems where questionID = ${probID}`;
-    let exist;
-    let userID;
-    let authorName;
-    let date;
-    let title;
-    let inputDesc;
-    let inputSample;
-    let outputDesc;
-    let outputSample;
-    let result;
-    try{
-        exist = await executeQuery(query);
-        exist = exist.length;
-        if (exist > 0){
-            let query = `select userID from Problems where questionID = ${probID}`;
-            userID = await executeQuery(query);
-            userID = userID[0].userID;
-            query =`select name from Users where userID = ${userID}`;
-            authorName = await executeQuery(query);
-            authorName = authorName[0].name;
-            query = `select creationDate from Problems where questionID = ${probID}`;
-            date = await executeQuery(query);
-            date = JSON.stringify(date[0].creationDate);
-            let year = date[1] + date[2] + date[3] + date[4];
-            let month = date[6] + date [7];
-            let day = date[9] + date[10];
-            date = month + "-" + day + "-" + year;
-            query = `select title from Problems where questionID = ${probID}`;
-            title = await executeQuery(query);
-            title = title[0].title;
-            query = `select inputDescription, outputDescription, sampleInput, sampleOutput from Problems where questionID = ${probID}`;
-            result = await executeQuery(query);
-            inputDesc = result[0].inputDescription;
-            outputDesc = result[0].outputDescription;
-            inputSample = result[0].sampleInput;
-            outputSample = result[0].sampleOutput;
-            res.render('pages/problem/problem-view', {
-                loggedIn: session.loggedIn ? true : false,
-                author: authorName,
-                dateCreated: date,
-                title: title,
-                InputDesc: inputDesc,
-                sampleInput: inputSample,
-                outDesc: outputDesc,
-                SampleOut: outputSample,
 
+    con.query(
+        `SELECT Problems.*, Users.name, Users.userName
+        FROM Problems
+        LEFT JOIN Users
+        ON Users.userID = Problems.userID
+        WHERE Problems.questionID = ${probID}`, 
+        (err, result) => {
+            if (err) {
+                console.log(`Error in SQL request: ${err.message}`);
+                return;
+            }
+
+            if (result.length === 0) {
+                res.redirect('/error')
+            }
+
+            // Convert Date to Readable String
+            let date = new Date(result[0].creationDate);
+            let month = date.toLocaleDateString('en-US', {month: 'long'});
+            let day = date.getDate();
+            let year = date.getFullYear();
+            let weekday = date.toLocaleDateString('en-US', {weekday: 'long'});
+            date = weekday + ' ' + month + ' ' + day + ' '  + year
+            result[0].creationDate = date
+
+            let problemData = result[0]
+            var mapData=[];
+            con.query(
+            `SELECT * FROM Users 
+            INNER JOIN Schools ON Users.schoolID = Schools.schoolID 
+            WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = ${probID})`, 
+            (err, result) => {
+                if (err) {
+                    console.log(`Error in SQL request: ${err.message}`);
+                    return;
+                }
+                for(var i = 0; i < result.length; i++){
+                    var entry = {
+                        username: result[i].userName,
+                        lat: result[i].latit,
+                        lng: result[i].longit
+                    }; 
+                    mapData.push(entry);
+                }
+                mapData = JSON.stringify(mapData);
+                res.render('pages/problem/problem-view', {
+                    loggedIn: session.loggedIn ? true : false,
+                    problemData: problemData,
+                    roleID: session.roleID,
+                    mapData: JSON.stringify(mapData)
+                })
             })
         }
-        else{
-            res.redirect('/error');
-        }
-    }catch (error){
-        console.log(`Error in SQL request 267: ${error.message}`);
-    }
-    
+    )
 });
 
 // GET for question creation page
