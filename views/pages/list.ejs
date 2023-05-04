@@ -29,7 +29,7 @@
     <h1>Coding Problems</h1>
     <% if (userRole === 1 || userRole === 2) { %>
       <div class="text-center pb-4">
-        <a href="/problem/create"><button>Create New Problem</button></a>
+        <a href="/problem/create" type="button" class="btn btn-primary">Create New Problem</a>
       </div>
     <% } %>
     <div class="input-group w-25 mx-auto">
@@ -37,10 +37,16 @@
     </div>
     <ul id="question-list">
       <% for(var i = 0; i < questions.length; i++) { %>
-        <li>
-          <h3><%= questions[i].title %></h3>
-          <p class="question-desc"><%= questions[i].description %></p>
-          <button>View</button>
+        <li style="height: 300px;">
+          <div class="mb-3" style="height: 20%; overflow: hidden; text-overflow: ellipsis">
+            <h3><%= questions[i].title %></h3>
+          </div>
+          <div class="mb-2" style="height: 58%; overflow:hidden; text-overflow: ellipsis">
+            <p class="question-desc"><%= questions[i].description %></p>
+          </div>
+          <div>
+            <a href='/problem/view/<%= questions[i].questionID %>' type="button" class="btn btn-primary">View</a>
+          </div>
         </li>
       <% } %>
     </ul>

@@ -18,24 +18,11 @@
 <body style="padding-top: 80px">
 
 
-<h1 style="text-align:center">Problem Worldmap</h1>
- 
-<!-- Search bar -->
-<section class="p-4 text-center w-100">
-    <div class="d-grid gap-2 col-6 mx-auto">
-    <div class="input-group">
-    <div class="form-outline">
-      <input type="search" id="form1" class="form-control" />
-      <label class="form-label" for="form1">Search</label>
-    </div>
-    </div>
-      <button type="button" class="btn btn-outline-dark">Search</button>
-    </div>
-</section>
+<h1 style="text-align:center">Solutions Map</h1>
 
-<%= mapData[0].username %>
-<%= mapData[0].lat %>
-<%= mapData[0].lng %>
+<%= solutionData[0].username %>
+<%= solutionData[0].lat %>
+<%= solutionData[0].lng %>
 
 <!-- Map declaration, looping through prob locations.  -->
 <div id="googleMap" class="mx-auto" style="width:90%; height:800px;"></div>
@@ -44,7 +31,7 @@
 <!-- eslint-disable-next-script -->
 <script>
   function myMap() {
-    var locArray = JSON.parse(<%- mapData %>); 
+    var locArray = JSON.parse(<%- solutionData %>); 
     console.log(locArray);
     console.log(locArray[0]);
     console.log(locArray[0].username);
