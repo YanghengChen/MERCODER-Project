@@ -100,8 +100,15 @@ async function hashPassword(plaintextPassword,userName,role) {
 
 // compare password
 async function comparePassword(plaintextPassword, hash) {
+    const myPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('Promise resolved');
+        }, 1000);
+    });
     const result = await bcrypt.compare(plaintextPassword, hash);
+    //console.log(result);
     return result;
+    
 }
 // POST for login/registration
 app.post('/login', (req, res) => {
@@ -125,10 +132,15 @@ app.post('/login', (req, res) => {
     if (loginUsername) {
         con.query(
             `SELECT * FROM Users WHERE userName = '${loginUsername}'`,
-            function (err, result) {
+            async function (err, result) {
                 console.log(err);
                 console.log(result);
                 console.log("result below");
+                let test;
+                console.log(result[0].pass);
+                console.log(loginPassword);
+                test = await comparePassword(loginPassword,result[0].pass);
+                console.log(test);
                 //console.log(result[0].pass);
                 if (err) {
                     console.log(`Error occurred in SQL request: ${err.message}`);
@@ -141,7 +153,7 @@ app.post('/login', (req, res) => {
                             error: "",
                             activeTab: "login"
                         })
-                    } else if (result[0].pass === loginPassword) {
+                    } else if (test === true) {
                         console.log("Redirecting to home page!");
                         session.userID = result[0].userID;
                         session.fullName = result[0].name;
