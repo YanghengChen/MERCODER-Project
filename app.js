@@ -203,7 +203,7 @@ app.post('/login', (req, res) => {
 // GET for map page
 app.get('/map/:problem', function (req, res) {
     var probID = req.params.problem;
-    var mapData=[];
+    var solutionData=[];
     var query = `SELECT * FROM Users INNER JOIN Schools ON Users.schoolID = Schools.schoolID WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = ${probID})`;
     con.query(
         query, 
@@ -215,15 +215,16 @@ app.get('/map/:problem', function (req, res) {
             for(var i = 0; i < result.length; i++){
                 var entry = {
                     username: result[i].userName,
+                    answer: result[i].answer,
                     lat: result[i].latit,
                     lng: result[i].longit
                 }; 
-                mapData.push(entry);
+                solutionData.push(entry);
             }
-            mapData = JSON.stringify(mapData);
+            solutionData = JSON.stringify(solutionData);
             res.render('pages/map', {
                 loggedIn: session.loggedIn ? true : false,
-                mapData: JSON.stringify(mapData)
+                solutionData: JSON.stringify(solutionData)
             })  
         }   
     )
@@ -259,7 +260,7 @@ app.get("/problem/view/:probID", async (req, res) => {
             result[0].creationDate = date
 
             let problemData = result[0]
-            var mapData=[];
+            var solutionData=[];
             con.query(
             `SELECT * FROM Users 
             INNER JOIN Schools ON Users.schoolID = Schools.schoolID 
@@ -272,17 +273,19 @@ app.get("/problem/view/:probID", async (req, res) => {
                 for(var i = 0; i < result.length; i++){
                     var entry = {
                         username: result[i].userName,
+
                         lat: result[i].latit,
                         lng: result[i].longit
                     }; 
-                    mapData.push(entry);
+                    solutionData.push(entry);
                 }
-                mapData = JSON.stringify(mapData);
+                console.log(solutionData)
+                solutionData = JSON.stringify(solutionData);
                 res.render('pages/problem/problem-view', {
                     loggedIn: session.loggedIn ? true : false,
                     problemData: problemData,
                     roleID: session.roleID,
-                    mapData: JSON.stringify(mapData)
+                    solutionData: JSON.stringify(solutionData)
                 })
             })
         }
