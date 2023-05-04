@@ -266,12 +266,13 @@ app.get("/problem/view/:probID", async (req, res) => {
             let problemData = result[0]
             var solutionData = new Array();
             con.query(
-            `SELECT * FROM Users 
+            `SELECT * FROM Users
             INNER JOIN Schools ON Users.schoolID = Schools.schoolID 
+            INNER JOIN Answers ON Users.userID = Answers.userID
             WHERE Users.userID = ANY (SELECT userID FROM Answers WHERE questionID = ${probID})`, 
             (err, result) => {
                 if (err) {
-                    console.log(`Error in SQL request: ${err.message}`);
+                    console.log(`Error in SQL request 275: ${err.message}`);
                     return;
                 }
 
@@ -598,6 +599,8 @@ app.post('/problem/submitSolution/:probID', (req, res) => {
             console.log("Solution successfully added.")
         }
     )
+
+    res.redirect(`/problem/view/${probID}`)
 })
 
 //get for loading error 404
