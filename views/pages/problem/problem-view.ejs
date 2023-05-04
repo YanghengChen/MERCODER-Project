@@ -72,7 +72,7 @@
             <% for (let i = 0; i < solutionData.length; i++) { %>
               <tr>
                 <td><%= solutionData[i].username %></td>
-                <td><%= solutionData[i].answer %></td>
+                <td><a href="<%= solutionData[i].answer %>"><%= solutionData[i].answer %></a></td>
                 <td><%= solutionData[i].date %></td>
               </tr>
             <% } %>
